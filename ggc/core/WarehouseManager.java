@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+import ggc.core.Warehouse;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.UnavailableFileException;
@@ -23,6 +24,14 @@ public class WarehouseManager {
   //FIXME define other attributes
   //FIXME define constructor(s)
   //FIXME define other methods
+
+  public int getCurrentDateValue() {
+    return _warehouse.getDate().getValue();
+  }
+
+  public boolean advanceCurrentDate(int value) {
+    return _warehouse.getDate().goForward(value);
+  }
 
   /**
    * @@throws IOException
