@@ -2,6 +2,7 @@ package ggc.app.main;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+import ggc.app.main.Message;
 import ggc.core.WarehouseManager;
 
 /**
@@ -15,7 +16,8 @@ class DoDisplayDate extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
+    _display.addLine(Message.currentDate(_receiver.getCurrentDateValue()));
+    _display.display();
   }
 
 }
