@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 import ggc.core.Warehouse;
+import ggc.core.Date;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.UnavailableFileException;
@@ -25,12 +26,12 @@ public class WarehouseManager {
   //FIXME define constructor(s)
   //FIXME define other methods
 
-  public int getCurrentDateValue() {
-    return _warehouse.getDate().getValue();
+  public Date getDate() {
+    return Date.now();
   }
 
-  public boolean advanceCurrentDate(int value) {
-    return _warehouse.getDate().goForward(value);
+  public void advanceDate(int value) {
+    _warehouse.advanceDate(value);
   }
 
   /**
