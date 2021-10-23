@@ -20,8 +20,8 @@ public class Warehouse implements Serializable {
     _date = new Date(0);
   }
 
-  public Date getDate() {
-    return _date;
+  public void advanceDate(int value) {
+    _date = _date.add(value);
   }
 
   // FIXME define attributes

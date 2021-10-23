@@ -3,23 +3,23 @@ package ggc.core;
 import java.io.Serializable;
 
 public class Date implements Serializable {
-    private int _value;
+    private static final long serialVersionUID = 202109192006L;
+
+    private static int _value;
 
     public Date(int value) {
         _value = value;
     }
 
-    public boolean goForward(int value) {
-        if (value < 0) {
-            return false;
-        }
-
-        _value += value;
-
-        return true;
+    public Date add(int value) {
+        return new Date(_value + value);
     }
 
     public int getValue() {
         return _value;
+    }
+
+    public static Date now() {
+        return new Date(_value);
     }
 }

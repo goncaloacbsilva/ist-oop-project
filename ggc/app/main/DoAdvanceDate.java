@@ -12,8 +12,6 @@ import ggc.core.WarehouseManager;
  */
 class DoAdvanceDate extends Command<WarehouseManager> {
 
-  private int _value;
-
   DoAdvanceDate(WarehouseManager receiver) {
     super(Label.ADVANCE_DATE, receiver);
 
@@ -22,10 +20,12 @@ class DoAdvanceDate extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    int date = integerField("advanceValue");
-    if (!_receiver.advanceCurrentDate(date)) {
-      throw new InvalidDateException(date);
+    int advanceValue = integerField("advanceValue");
+    if (advanceValue < 0) {
+      throw new InvalidDateException(advanceValue);
     }
+
+    _receiver.advanceDate(advanceValue);
   }
 
 }
