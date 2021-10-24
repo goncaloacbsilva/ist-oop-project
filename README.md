@@ -33,6 +33,7 @@ For branches use: <br>
 `(layer)`
 - **APP**  : Application User Interaction Layer
 - **CORE** : Application Core Layer
+- **GENERAL** : When implementing code on APP and CORE layers
 
 `(package)`<br>
 The name of the package or module (can also be a class) that you are implementing
