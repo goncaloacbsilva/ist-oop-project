@@ -12,7 +12,7 @@ public class Batch {
     private int _ammount;
     private double _unitPrice;
 
-    public Batch(Partner suplier, Product product, int ammount, int unitPrice) {
+    public Batch(Partner suplier, Product product, int ammount, double unitPrice) {
         _suplier = suplier;
         _product = product;
         _ammount = ammount;
