@@ -2,6 +2,8 @@
 
 # PO - Warehouse Manager Project
 
+## Created with 🍺🍺 and some ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
+
 ## Authors
 This project was made by:
 - (96925) Gonçalo Abreu Corrêa Brito da Silva
