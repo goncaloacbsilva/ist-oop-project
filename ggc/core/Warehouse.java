@@ -4,8 +4,14 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.io.IOException;
-import ggc.core.exception.BadEntryException;
+
+import java.util.Set;
+import java.util.HashSet;
+
 import ggc.core.Date;
+import ggc.core.product.Product;
+import ggc.core.exception.BadEntryException;
+
 
 /**
  * Class Warehouse implements a warehouse.
@@ -14,19 +20,25 @@ public class Warehouse implements Serializable {
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202109192006L;
+
+  /** Warehouse date object */
   private Date _date;
+
+  /** Warehouse products */
+  private Set<Product> _products;
 
   public Warehouse() {
     _date = new Date(0);
+    _products = new HashSet<>();
   }
 
   public void advanceDate(int value) {
     _date = _date.add(value);
   }
 
-  // FIXME define attributes
-  // FIXME define contructor(s)
-  // FIXME define methods
+  public Set<Product> getProducts() {
+    return new HashSet<>(_products);
+  }
 
   /**
    * @param txtfile filename to be loaded.

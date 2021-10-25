@@ -6,8 +6,11 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+import java.util.Set;
+
 import ggc.core.Warehouse;
 import ggc.core.Date;
+import ggc.core.product.Product;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.UnavailableFileException;
@@ -22,16 +25,16 @@ public class WarehouseManager {
   /** The wharehouse itself. */
   private Warehouse _warehouse = new Warehouse();
 
-  //FIXME define other attributes
-  //FIXME define constructor(s)
-  //FIXME define other methods
-
   public Date getDate() {
     return Date.now();
   }
 
   public void advanceDate(int value) {
     _warehouse.advanceDate(value);
+  }
+
+  public Set<Product> getProducts() {
+    return _warehouse.getProducts();
   }
 
   /**
