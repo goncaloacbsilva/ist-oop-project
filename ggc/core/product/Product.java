@@ -1,6 +1,13 @@
 package ggc.core.product;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import ggc.core.product.Batch;
+import ggc.core.partner.Partner;
+
+//TODO: Serialization
 
 /** Implements Product Base (abstract) class */
 public abstract class Product implements Serializable {
@@ -16,6 +23,7 @@ public abstract class Product implements Serializable {
     
     /** Product id */
     private String _id;
+    private List<Batch> _batches;
 
 
     public Product(String id) {
@@ -28,6 +36,7 @@ public abstract class Product implements Serializable {
      */
     public void updateMaxPrice(double maxPrice) {
         _maxPrice = maxPrice;
+        _batches = new ArrayList<>();
     }
 
     /** 
@@ -72,6 +81,14 @@ public abstract class Product implements Serializable {
         return getId() + "|" + Math.round(getMaxPrice()) + "|" + getTotalStock();
     }
 
+    public void addBatch(Partner suplier, int ammount, int unitPrice) {
+        _batches.add(new Batch(suplier, this, ammount, unitPrice));
+    }
+    
+    public List<Batch> getBatches() {
+        return new ArrayList<>(_batches);
+    }
+    
     /* Override equals in order to compare Products by name */
     @Override
     public boolean equals(Object a) {
@@ -84,7 +101,7 @@ public abstract class Product implements Serializable {
             return false;
         }
 
-        return ((Product)a).getId().toLowerCase().equals(_id.toLowerCase());
+        return ((Product)a).getId().equalsIgnoreCase(_id.toLowerCase());
     }
 
     /* Override hashCode to compare Product objects by their id */
