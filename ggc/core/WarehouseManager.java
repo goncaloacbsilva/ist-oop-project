@@ -1,7 +1,5 @@
 package ggc.core;
 
-//FIXME import classes (cannot import from pt.tecnico or ggc.app)
-
 import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -12,9 +10,12 @@ import ggc.core.Warehouse;
 import ggc.core.Date;
 import ggc.core.product.Product;
 import ggc.core.product.Batch;
+import ggc.core.partner.Partner;
+
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.MissingFileAssociationException;
 
 /** Façade for access. */
@@ -38,9 +39,20 @@ public class WarehouseManager {
     return _warehouse.getProducts();
   }
 
+  public Partner getPartner(String id) throws UnknownObjectKeyException {
+    for (Partner partner : _warehouse.getPartners()) {
+      if (partner.getId().equals(id)) {
+
+        return partner;
+      }
+    }
+    throw new UnknownObjectKeyException();
+  }
+
   public List<Batch> getAvailableBatches() {
     return _warehouse.getAvailableBatches();
   }
+
 
   /**
    * @@throws IOException

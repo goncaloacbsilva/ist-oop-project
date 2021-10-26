@@ -65,17 +65,15 @@ public abstract class Product implements Serializable {
 
     /**
      * Adds a new product batch
-     * @param suplier Partner who suplies the batch
-     * @param ammount Ammount of product units
-     * @param unitPrice Price per unit
+     * @param batch
      */
-    public void addBatch(Partner suplier, int ammount, double unitPrice) {
-        _totalStock += ammount;
-        if (unitPrice > _maxPrice) {
-            _maxPrice = unitPrice;
+    public void addBatch(Batch batch) {
+        _totalStock += batch.getAmmount();
+        if (batch.getUnitPrice() > _maxPrice) {
+            _maxPrice = batch.getUnitPrice();
         }
         
-        _batches.add(new Batch(suplier, this, ammount, unitPrice));
+        _batches.add(batch);
     }
     
     /**

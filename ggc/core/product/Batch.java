@@ -34,6 +34,22 @@ public class Batch {
     }
 
     /**
+     * Get ammount of product units
+     * @return int ammount
+     */
+    public int getAmmount() {
+        return _ammount;
+    }
+
+    /**
+     * Get price per unit
+     * @return double price
+     */
+    public double getUnitPrice() {
+        return _unitPrice;
+    }
+
+    /**
      * Displays Batch Information
      * @return String (idProduto|idParceiro|preço|stock-actual)
      */
