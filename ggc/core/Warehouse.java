@@ -12,12 +12,9 @@ import java.util.HashSet;
 
 import ggc.core.Date;
 import ggc.core.product.Product;
-//
-import ggc.core.product.SimpleProduct;
 import ggc.core.product.Batch;
-//
-import ggc.core.exception.BadEntryException;
 import ggc.core.partner.Partner;
+import ggc.core.exception.BadEntryException;
 
 
 /**
@@ -41,25 +38,6 @@ public class Warehouse implements Serializable {
     _date = new Date(0);
     _products = new HashSet<>();
     _partners = new HashSet<>();
-    //DEBUG
-    Partner pa = new Partner("P2", "Manuel", "SEI_LA");
-    Product oxigenio = new SimpleProduct("OXIGENIO");
-    Product hidrogenio = new SimpleProduct("HIDROGENIO");
-    Batch oxigenioB1 = new Batch(pa, oxigenio, 10, 2.58);
-    Batch oxigenioB2 = new Batch(pa, oxigenio, 200, 1.50);
-    Batch hidrogenioB1 = new Batch(pa, hidrogenio, 82, 4.58);
-    Batch hidrogenioB2 = new Batch(pa, hidrogenio, 5, 10.50);
-
-    oxigenio.addBatch(oxigenioB1);
-    hidrogenio.addBatch(hidrogenioB2);
-
-    pa.addBatch(hidrogenioB1);
-    pa.addBatch(oxigenioB2);
-    
-    _products.add(oxigenio);
-    _products.add(hidrogenio);
-    _partners.add(pa);
-
   }
 
   public void advanceDate(int value) {
