@@ -1,11 +1,16 @@
 package ggc.core.partner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import ggc.core.product.Batch;
 
-public class Partner {
+public class Partner implements Serializable {
+
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202109192006L;
+
     private String _id;
     private String _name;
     private String _address;
