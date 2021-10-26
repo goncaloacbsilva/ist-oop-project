@@ -1,6 +1,11 @@
 package ggc.core.product;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import ggc.core.product.Batch;
+import ggc.core.partner.Partner;
 
 /** Implements Product Base (abstract) class */
 public abstract class Product implements Serializable {
@@ -16,26 +21,12 @@ public abstract class Product implements Serializable {
     
     /** Product id */
     private String _id;
+    private List<Batch> _batches;
 
 
     public Product(String id) {
         _id = id;
-    }
-
-    /** 
-     * Update product maximum price
-     * @param maxPrice Maximum price
-     */
-    public void updateMaxPrice(double maxPrice) {
-        _maxPrice = maxPrice;
-    }
-
-    /** 
-     * Update total stock
-     * @param stock New total stock
-     */
-    public void updateTotalStock(int stock) {
-        _totalStock = stock;
+        _batches = new ArrayList<>();
     }
 
     /**
@@ -64,7 +55,7 @@ public abstract class Product implements Serializable {
 
 
     /**
-     * Display Simple Product Information 
+     * Displays Simple Product Information 
      * @return String (idProduto|preço-máximo|stock-actual-total)
      * @see DerivativeProduct#display()
      */
@@ -72,6 +63,29 @@ public abstract class Product implements Serializable {
         return getId() + "|" + Math.round(getMaxPrice()) + "|" + getTotalStock();
     }
 
+    /**
+     * Adds a new product batch
+     * @param suplier Partner who suplies the batch
+     * @param ammount Ammount of product units
+     * @param unitPrice Price per unit
+     */
+    public void addBatch(Partner suplier, int ammount, double unitPrice) {
+        _totalStock += ammount;
+        if (unitPrice > _maxPrice) {
+            _maxPrice = unitPrice;
+        }
+        
+        _batches.add(new Batch(suplier, this, ammount, unitPrice));
+    }
+    
+    /**
+     * Get product batches
+     * @return list of the product batches
+     */
+    public List<Batch> getBatches() {
+        return new ArrayList<>(_batches);
+    }
+    
     /* Override equals in order to compare Products by name */
     @Override
     public boolean equals(Object a) {
@@ -84,7 +98,7 @@ public abstract class Product implements Serializable {
             return false;
         }
 
-        return ((Product)a).getId().toLowerCase().equals(_id.toLowerCase());
+        return ((Product)a).getId().equalsIgnoreCase(_id.toLowerCase());
     }
 
     /* Override hashCode to compare Product objects by their id */

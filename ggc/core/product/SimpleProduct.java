@@ -6,7 +6,7 @@ import ggc.core.product.Product;
 public class SimpleProduct extends Product {
 
     /**
-     * Create a Simple Product
+     * Creates a Simple Product
      * @param id Product id
      */
     public SimpleProduct(String id) {
