@@ -42,8 +42,16 @@ public class WarehouseManager {
   public Partner getPartner(String id) throws UnknownObjectKeyException {
     for (Partner partner : _warehouse.getPartners()) {
       if (partner.getId().equals(id)) {
-
         return partner;
+      }
+    }
+    throw new UnknownObjectKeyException();
+  }
+
+  public Product getProduct(String id) throws UnknownObjectKeyException {
+    for (Product product : _warehouse.getProducts()) {
+      if (product.getId().equals(id)) {
+        return product;
       }
     }
     throw new UnknownObjectKeyException();
