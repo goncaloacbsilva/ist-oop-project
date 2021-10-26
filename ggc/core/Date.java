@@ -10,7 +10,7 @@ public class Date implements Serializable {
     private static int _value;
 
     /**
-     * Create new Date object with the supplied value
+     * Creates a new Date object with the supplied value
      * @param value
      */
     public Date(int value) {
@@ -18,16 +18,16 @@ public class Date implements Serializable {
     }
 
     /**
-     * Advance a given number of days
+     * Advances a given number of days
      * @param value number of days to advance
-     * @return Date object
+     * @return new Date object
      */
     public Date add(int value) {
         return new Date(_value + value);
     }
 
     /**
-     * Calculate the difference between two dates
+     * Calculates the difference between two dates
      * @param date Date to compare
      * @return absolute difference between dates 
      */

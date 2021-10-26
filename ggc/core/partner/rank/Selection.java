@@ -1,11 +1,13 @@
-package ggc.core.partner;
+package ggc.core.partner.rank;
+
+
 
 public class Selection implements Rank {
     
     @Override
     public double getDiscount(int period, int N) {
         
-        if (period>=N){
+        if (period >= N){
             return 0.90;
         }
 
@@ -62,10 +64,12 @@ public class Selection implements Rank {
             return 0;
         }
     }
+
     @Override
     public String getRankName(){
         return "Selection";
     }
+
     @Override
     public Boolean checkRankMatch(int points){
         return ( 25000 >= points && points > 2000 );

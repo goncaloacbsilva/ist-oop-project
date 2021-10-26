@@ -3,7 +3,7 @@ package ggc.core.partner.rank;
 public class Normal implements Rank {
     
     @Override
-    public double getDiscount(int period,int N){
+    public double getDiscount(int period, int N) {
         if (period>=N){
             return 0.90;
         }
@@ -26,11 +26,11 @@ public class Normal implements Rank {
         }
         
     }
-    }
+    
 
     @Override
-    public double getPenalty(int period,int N){
-        if (period>=N){
+    public double getPenalty(int period, int N){
+        if (period >= N){
             return 1.00;
         }
 
@@ -53,13 +53,13 @@ public class Normal implements Rank {
         }
         
     }
+    
+    @Override
+    public String getRankName() {
+        return "Normal";
     }
     @Override
-    public String getRankName(){
-
-    }
-    @Override
-    public Boolean checkRankMatch(int points){
-        
+    public Boolean checkRankMatch(int points) {
+        return true;
     }
 }
