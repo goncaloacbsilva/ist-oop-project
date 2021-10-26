@@ -16,7 +16,6 @@ import ggc.core.product.Product;
 import ggc.core.product.SimpleProduct;
 import ggc.core.product.Batch;
 //
-import ggc.core.product.Batch;
 import ggc.core.exception.BadEntryException;
 import ggc.core.partner.Partner;
 
@@ -35,19 +34,31 @@ public class Warehouse implements Serializable {
   /** Warehouse products */
   private Set<Product> _products;
 
+  /** Warehouse associated partners */
+  private Set<Partner> _partners;
+
   public Warehouse() {
     _date = new Date(0);
     _products = new HashSet<>();
+    _partners = new HashSet<>();
     //DEBUG
     Partner pa = new Partner("P2", "Manuel", "SEI_LA");
     Product oxigenio = new SimpleProduct("OXIGENIO");
     Product hidrogenio = new SimpleProduct("HIDROGENIO");
-    oxigenio.addBatch(pa, 10, 2.58);
-    oxigenio.addBatch(pa, 200, 1.50);
-    hidrogenio.addBatch(pa, 82, 4.58);
-    hidrogenio.addBatch(pa, 5, 10.50);
+    Batch oxigenioB1 = new Batch(pa, oxigenio, 10, 2.58);
+    Batch oxigenioB2 = new Batch(pa, oxigenio, 200, 1.50);
+    Batch hidrogenioB1 = new Batch(pa, hidrogenio, 82, 4.58);
+    Batch hidrogenioB2 = new Batch(pa, hidrogenio, 5, 10.50);
+
+    oxigenio.addBatch(oxigenioB1);
+    hidrogenio.addBatch(hidrogenioB2);
+
+    pa.addBatch(hidrogenioB1);
+    pa.addBatch(oxigenioB2);
+    
     _products.add(oxigenio);
     _products.add(hidrogenio);
+    _partners.add(pa);
 
   }
 
@@ -57,6 +68,10 @@ public class Warehouse implements Serializable {
 
   public Set<Product> getProducts() {
     return new HashSet<>(_products);
+  }
+
+  public List<Partner> getPartners() {
+    return new ArrayList<>(_partners);
   }
 
   public List<Batch> getAvailableBatches() {
