@@ -1,11 +1,15 @@
 package ggc.core.product;
 
+import java.io.Serializable;
 import java.lang.Math;
 import ggc.core.partner.Partner;
 import ggc.core.product.Product;
 
 /** Implements Batch class */
-public class Batch {
+public class Batch implements Serializable {
+
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202109192006L;
 
     /** Batch suplier */
     private Partner _suplier;
