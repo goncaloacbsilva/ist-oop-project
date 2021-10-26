@@ -2,8 +2,10 @@ package ggc.app.products;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
+import ggc.core.product.Batch;
+import ggc.core.exception.UnknownObjectKeyException;
 
 /**
  * Show batches supplied by partner.
@@ -12,12 +14,20 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
 
   DoShowBatchesByPartner(WarehouseManager receiver) {
     super(Label.SHOW_BATCHES_SUPPLIED_BY_PARTNER, receiver);
-    //FIXME maybe add command fields
+    addStringField("partnerId", Message.requestPartnerKey());
   }
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
+    String partnerId = stringField("partnerId");
+    try {
+      for(Batch batch : _receiver.getPartner(partnerId).getBatches()) {
+        _display.addLine(batch.toString());
+      }
+      _display.display();
+    } catch (UnknownObjectKeyException e) {
+      throw new UnknownPartnerKeyException(partnerId);
+    }
   }
 
 }
