@@ -7,8 +7,6 @@ import java.util.List;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
 
-//TODO: Serialization
-
 /** Implements Product Base (abstract) class */
 public abstract class Product implements Serializable {
 
@@ -57,7 +55,7 @@ public abstract class Product implements Serializable {
 
 
     /**
-     * Display Simple Product Information 
+     * Displays Simple Product Information 
      * @return String (idProduto|preço-máximo|stock-actual-total)
      * @see DerivativeProduct#display()
      */
@@ -66,7 +64,7 @@ public abstract class Product implements Serializable {
     }
 
     /**
-     * Add a new product batch
+     * Adds a new product batch
      * @param suplier Partner who suplies the batch
      * @param ammount Ammount of product units
      * @param unitPrice Price per unit

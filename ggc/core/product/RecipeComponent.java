@@ -12,7 +12,7 @@ public class RecipeComponent {
     private int _ammount;
 
     /**
-     * Create a Recipe Component
+     * Creates a Recipe Component
      * @param product product associated
      * @param ammount product ammount for the recipe
      */

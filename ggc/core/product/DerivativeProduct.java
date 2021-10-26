@@ -17,7 +17,7 @@ public class DerivativeProduct extends Product {
     private double _alpha;
 
     /**
-     * Create a Derivative Product
+     * Creates a Derivative Product
      * @param id Product id
      * @param recipe recipe
      * @param alpha Alpha factor
@@ -38,7 +38,7 @@ public class DerivativeProduct extends Product {
 
 
     /**
-     * Display Derivative Product Information
+     * Displays Derivative Product Information
      * @return String (idProduto|preço-máximo|stock-actual-total|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n)
      */
     @Override
