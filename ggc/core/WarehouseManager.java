@@ -1,6 +1,10 @@
 package ggc.core;
 
 import java.io.Serializable;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -35,8 +39,16 @@ public class WarehouseManager {
     _warehouse.advanceDate(value);
   }
 
+  public String getFilename() {
+    return _filename;
+  }
+
   public Set<Product> getProducts() {
     return _warehouse.getProducts();
+  }
+
+  public List<Batch> getAvailableBatches() {
+    return _warehouse.getAvailableBatches();
   }
 
   public Partner getPartner(String id) throws UnknownObjectKeyException {
@@ -57,18 +69,27 @@ public class WarehouseManager {
     throw new UnknownObjectKeyException();
   }
 
-  public List<Batch> getAvailableBatches() {
-    return _warehouse.getAvailableBatches();
-  }
 
 
   /**
-   * @@throws IOException
-   * @@throws FileNotFoundException
-   * @@throws MissingFileAssociationException
+   * @throws IOException
+   * @throws FileNotFoundException
+   * @throws MissingFileAssociationException
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
-    //FIXME implement serialization method
+    if (_filename.equals("")) {
+      throw new MissingFileAssociationException();
+    }
+    try (
+      FileOutputStream outFile = new FileOutputStream(_filename);
+      ObjectOutputStream outStream = new ObjectOutputStream(outFile)
+    ) {
+      outStream.writeObject(_warehouse);
+    } catch (FileNotFoundException e) {
+      throw e;
+    } catch (IOException e) {
+      throw e;
+    }
   }
 
   /**
@@ -77,9 +98,13 @@ public class WarehouseManager {
    * @@throws IOException
    * @@throws FileNotFoundException
    */
-  public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
+  public void saveAs(String filename) throws FileNotFoundException, IOException {
     _filename = filename;
-    save();
+    try {
+      save();
+    } catch (MissingFileAssociationException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -87,7 +112,17 @@ public class WarehouseManager {
    * @@throws UnavailableFileException
    */
   public void load(String filename) throws UnavailableFileException, ClassNotFoundException  {
-    //FIXME implement serialization method
+    try (
+      FileInputStream inFile = new FileInputStream(filename);
+      ObjectInputStream inStream = new ObjectInputStream(inFile)
+    ) {
+      _warehouse = (Warehouse) inStream.readObject();
+      _filename = filename;
+    } catch (IOException e) {
+      throw new UnavailableFileException(filename);
+    } catch (ClassNotFoundException e) {
+      throw new ClassNotFoundException();
+    }
   }
 
   /**
