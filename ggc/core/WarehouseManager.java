@@ -12,6 +12,7 @@ import java.util.Set;
 
 import ggc.core.Warehouse;
 import ggc.core.Date;
+import ggc.core.Parser;
 import ggc.core.product.Product;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
@@ -127,9 +128,10 @@ public class WarehouseManager {
    * @param textfile
    * @throws ImportFileException
    */
-  public void importFile(String textfile) throws ImportFileException {
+  public void importFile(String textfile) throws ImportFileException, BadEntryException {
+    Parser parser = new Parser(_warehouse);
     try {
-      _warehouse.importFile(textfile);
+      parser.parseFile(textfile);
     } catch (IOException | BadEntryException e) {
       throw new ImportFileException(textfile, e);
     }

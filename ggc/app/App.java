@@ -3,6 +3,7 @@ package ggc.app;
 import pt.tecnico.uilib.Dialog;
 import pt.tecnico.uilib.menus.Menu;
 import ggc.core.WarehouseManager;
+import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 
 /** Main driver for the management application. */
@@ -17,8 +18,9 @@ public class App {
       if (datafile != null) {
         try {
           manager.importFile(datafile);
+        } catch (BadEntryException e) {
+          e.printStackTrace();
         } catch (ImportFileException e) {
-          // no behavior described: just present the problem
           e.printStackTrace();
         }
       }

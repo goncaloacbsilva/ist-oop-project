@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import ggc.core.Date;
+import ggc.core.Parser;
 import ggc.core.product.Product;
 import ggc.core.product.SimpleProduct;
 import ggc.core.product.Batch;
@@ -81,6 +82,10 @@ public class Warehouse implements Serializable {
     return _partners.add(partner);
   }
 
+  public boolean addProduct(Product product) {
+    return _products.add(product);
+  }
+
   public List<Partner> getPartners() {
     List<Partner> partners = new ArrayList<>(_partners);
     Collections.sort(partners);
@@ -104,43 +109,8 @@ public class Warehouse implements Serializable {
    * @throws BadEntryException
    */
   void importFile(String txtfile) throws IOException, BadEntryException {
-    try (
-			BufferedReader reader = new BufferedReader(new FileReader(txtfile));
-    ) {
-			String line = reader.readLine();
-			while (line != null) {
-        String[] objectString = line.split("\\|");
-        if (objectString[0].equals("PARTNER")) {
-          addPartner(new Partner(objectString));
-        } 
-        else if (objectString[0].equals("BATCH_S")) {
-          Product product = null;
-          Partner partner = null;
-
-          try {
-            product = getProduct(objectString[1]);
-          } catch (UnknownObjectKeyException e) {
-            product = new SimpleProduct(objectString[1]);
-            _products.add(product);
-          }
-
-          try {
-            partner = getPartner(objectString[2]);
-          } catch (UnknownObjectKeyException e) {
-            // DEU MERDA
-          }
-
-          Batch batch = new Batch(partner, product, Integer.valueOf(objectString[4]), Integer.valueOf(objectString[3]));
-
-          product.addBatch(batch);
-          partner.addBatch(batch);
-          
-        }
-				line = reader.readLine();
-			}
-		} catch (IOException e) {
-			throw new IOException(e);
-		}
+    Parser parser = new Parser(this);
+    parser.parseFile(txtfile);
   }
 
 }
