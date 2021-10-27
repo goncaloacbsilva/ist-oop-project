@@ -4,11 +4,8 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import pt.tecnico.uilib.forms.Form;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
-import ggc.app.exception.FileCouldNotBeFoundException;
 import ggc.app.exception.FileOpenFailedException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.MissingFileAssociationException;
@@ -37,9 +34,7 @@ class DoSaveFile extends Command<WarehouseManager> {
         _form.parse();
         _receiver.saveAs(_form.stringField("filename"));
       }
-    } catch (FileNotFoundException e) {
-      throw new FileCouldNotBeFoundException(_receiver.getFilename());
-    } catch (IOException e) {
+    } catch (IOException ignored) {
       throw new FileOpenFailedException(_receiver.getFilename());
     }
   }
