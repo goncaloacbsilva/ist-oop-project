@@ -76,7 +76,7 @@ public class WarehouseManager {
    * @throws MissingFileAssociationException
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
-    if (_filename.equals("")) {
+    if (_filename.isEmpty()) {
       throw new MissingFileAssociationException();
     }
     try (
@@ -84,10 +84,6 @@ public class WarehouseManager {
       ObjectOutputStream outStream = new ObjectOutputStream(outFile)
     ) {
       outStream.writeObject(_warehouse);
-    } catch (FileNotFoundException e) {
-      throw e;
-    } catch (IOException e) {
-      throw e;
     }
   }
 
@@ -117,9 +113,9 @@ public class WarehouseManager {
     ) {
       _warehouse = (Warehouse) inStream.readObject();
       _filename = filename;
-    } catch (IOException e) {
+    } catch (IOException ignored) {
       throw new UnavailableFileException(filename);
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException ignored) {
       throw new ClassNotFoundException();
     }
   }
@@ -132,7 +128,7 @@ public class WarehouseManager {
     Parser parser = new Parser(_warehouse);
     try {
       parser.parseFile(textfile);
-    } catch (IOException | BadEntryException e) {
+    } catch (IOException | BadEntryException | UnknownObjectKeyException e) {
       throw new ImportFileException(textfile, e);
     }
   }

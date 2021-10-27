@@ -66,7 +66,7 @@ public class Warehouse implements Serializable {
         return product;
       }
     }
-    throw new UnknownObjectKeyException();
+    throw new UnknownObjectKeyException(id);
   }
 
   public Partner getPartner(String id) throws UnknownObjectKeyException {
@@ -75,7 +75,7 @@ public class Warehouse implements Serializable {
         return partner;
       }
     }
-    throw new UnknownObjectKeyException();
+    throw new UnknownObjectKeyException(id);
   }
 
   public boolean addPartner(Partner partner){
@@ -84,6 +84,14 @@ public class Warehouse implements Serializable {
 
   public boolean addProduct(Product product) {
     return _products.add(product);
+  }
+
+  public void addBatch(String idPartner, String idProduct, int stock, double price) throws UnknownObjectKeyException {
+    Product product = getProduct(idProduct);
+    Partner partner = getPartner(idPartner);
+    Batch batch = new Batch(partner, product, stock, price);
+    product.addBatch(batch);
+    partner.addBatch(batch);  
   }
 
   public List<Partner> getPartners() {
@@ -108,7 +116,7 @@ public class Warehouse implements Serializable {
    * @throws IOException
    * @throws BadEntryException
    */
-  void importFile(String txtfile) throws IOException, BadEntryException {
+  void importFile(String txtfile) throws IOException, BadEntryException, UnknownObjectKeyException {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
   }

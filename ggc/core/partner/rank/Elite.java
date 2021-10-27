@@ -1,6 +1,5 @@
 package ggc.core.partner.rank;
 import java.io.Serializable;
-import java.lang.Math;
 
 public class Elite implements Rank, Serializable {
 
@@ -9,7 +8,7 @@ public class Elite implements Rank, Serializable {
     
     @Override
     public double getDiscount(int period, int N) {
-        if (period>=N){
+        if (period >= N){
             return 0.90;
         }
 
@@ -22,7 +21,7 @@ public class Elite implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if(Math.abs(period) > N) {
             return 1.00;
         }
 
@@ -35,7 +34,7 @@ public class Elite implements Rank, Serializable {
     @Override
     public double getPenalty(int period, int N) {
 
-        if (period>=N) {
+        if (period >= N) {
             return 1.00;
         }
 
@@ -47,7 +46,7 @@ public class Elite implements Rank, Serializable {
             return 1.00;
         }
 
-        else if ( Math.abs(period) >N ) {
+        else if (Math.abs(period) > N) {
             return 1.00;
         }
 

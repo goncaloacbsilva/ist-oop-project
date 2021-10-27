@@ -1,7 +1,6 @@
 package ggc.core.product;
 
 import java.io.Serializable;
-import java.lang.Math;
 import ggc.core.partner.Partner;
 import ggc.core.product.Product;
 

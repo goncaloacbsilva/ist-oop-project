@@ -3,11 +3,8 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
-import java.lang.Math;
-
 import ggc.core.WarehouseManager;
 import ggc.core.product.Product;
-//FIXME import classes
 
 /**
  * Show all products.
