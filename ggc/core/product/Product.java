@@ -2,13 +2,15 @@ package ggc.core.product;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ggc.core.product.Batch;
+import ggc.core.exception.BadEntryException;
 import ggc.core.partner.Partner;
 
 /** Implements Product Base (abstract) class */
-public abstract class Product implements Serializable {
+public abstract class Product implements Serializable, Comparable<Product> {
 
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
@@ -81,7 +83,13 @@ public abstract class Product implements Serializable {
      * @return list of the product batches
      */
     public List<Batch> getBatches() {
-        return new ArrayList<>(_batches);
+        List<Batch> batches = new ArrayList<>(_batches);
+        Collections.sort(batches);
+        return batches;
+    }
+
+    public int compareTo(Product product) {
+        return _id.compareTo(product.getId());
     }
     
     /* Override equals in order to compare Products by name */

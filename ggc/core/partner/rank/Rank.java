@@ -5,4 +5,5 @@ public interface Rank {
     public double getPenalty(int period, int N);
     public String getRankName();
     public Boolean checkRankMatch(int points);
+    public double getPointsPenalty(int period);
 }

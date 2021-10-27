@@ -1,7 +1,11 @@
 package ggc.core.partner.rank;
+import java.io.Serializable;
 import java.lang.Math;
 
-public class Elite implements Rank {
+public class Elite implements Rank, Serializable {
+
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202109192006L;
     
     @Override
     public double getDiscount(int period, int N) {
@@ -55,12 +59,21 @@ public class Elite implements Rank {
     @Override
     public String getRankName() {
 
-        return "Elite";
+        return "ELITE";
     }
 
     @Override
     public Boolean checkRankMatch(int points) {
         
         return (points > 25000);
+    }
+
+    @Override
+    public double getPointsPenalty(int period){
+        if(period < -15) {
+            return 0.25;
+        } else {
+            return 1;
+        }
     }
 }

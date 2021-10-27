@@ -1,7 +1,12 @@
 package ggc.core.partner.rank;
 
-public class Normal implements Rank {
+import java.io.Serializable;
+
+public class Normal implements Rank, Serializable {
     
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202109192006L;
+
     @Override
     public double getDiscount(int period, int N) {
         if (period>=N){
@@ -49,17 +54,23 @@ public class Normal implements Rank {
         }
 
         else {
-            return 1;
+            return 0;
         }
         
     }
     
     @Override
     public String getRankName() {
-        return "Normal";
+        return "NORMAL";
     }
+
     @Override
     public Boolean checkRankMatch(int points) {
-        return true;
+        return (points>=0 && points<=2000);
+    }
+
+    @Override
+    public double getPointsPenalty(int period){
+        return 0;
     }
 }
