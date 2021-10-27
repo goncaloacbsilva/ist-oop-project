@@ -12,6 +12,7 @@ import java.util.Set;
 
 import ggc.core.Warehouse;
 import ggc.core.Date;
+import ggc.core.Parser;
 import ggc.core.product.Product;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
@@ -32,7 +33,7 @@ public class WarehouseManager {
   private Warehouse _warehouse = new Warehouse();
 
   public Date getDate() {
-    return Date.now();
+    return _warehouse.getDate().now();
   }
 
   public void advanceDate(int value) {
@@ -43,7 +44,7 @@ public class WarehouseManager {
     return _filename;
   }
 
-  public Set<Product> getProducts() {
+  public List<Product> getProducts() {
     return _warehouse.getProducts();
   }
 
@@ -51,24 +52,22 @@ public class WarehouseManager {
     return _warehouse.getAvailableBatches();
   }
 
+  public List<Partner> getPartners() {
+    return _warehouse.getPartners();
+  }
+
   public Partner getPartner(String id) throws UnknownObjectKeyException {
-    for (Partner partner : _warehouse.getPartners()) {
-      if (partner.getId().equals(id)) {
-        return partner;
-      }
-    }
-    throw new UnknownObjectKeyException();
+    return _warehouse.getPartner(id);
   }
 
   public Product getProduct(String id) throws UnknownObjectKeyException {
-    for (Product product : _warehouse.getProducts()) {
-      if (product.getId().equals(id)) {
-        return product;
-      }
-    }
-    throw new UnknownObjectKeyException();
+    return _warehouse.getProduct(id);
   }
 
+
+  public boolean addPartner(String id, String name, String address){
+    return _warehouse.addPartner(new Partner(id, name, address));
+  }
 
 
   /**
@@ -129,10 +128,11 @@ public class WarehouseManager {
    * @param textfile
    * @throws ImportFileException
    */
-  public void importFile(String textfile) throws ImportFileException {
+  public void importFile(String textfile) throws ImportFileException, BadEntryException {
+    Parser parser = new Parser(_warehouse);
     try {
-      _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException /* FIXME maybe other exceptions */ e) {
+      parser.parseFile(textfile);
+    } catch (IOException | BadEntryException e) {
       throw new ImportFileException(textfile, e);
     }
   }

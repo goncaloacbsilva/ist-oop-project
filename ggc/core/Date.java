@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class Date implements Serializable {
     private static final long serialVersionUID = 202109192006L;
-    private static int _value;
+    private int _value; // Should be Static! But right now it cant be because of Serialization
 
     /**
      * Creates a new Date object with the supplied value
@@ -47,7 +47,7 @@ public class Date implements Serializable {
      * Get the current Date object
      * @return Date object
      */
-    public static Date now() {
+    public Date now() {
         return new Date(_value);
     }
 }
