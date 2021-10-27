@@ -18,9 +18,7 @@ public class App {
       if (datafile != null) {
         try {
           manager.importFile(datafile);
-        } catch (BadEntryException e) {
-          e.printStackTrace();
-        } catch (ImportFileException e) {
+        } catch (BadEntryException | ImportFileException e) {
           e.printStackTrace();
         }
       }
