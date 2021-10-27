@@ -1,5 +1,4 @@
 package ggc.core.partner.rank;
-
 import java.io.Serializable;
 
 public class Normal implements Rank, Serializable {
@@ -9,7 +8,7 @@ public class Normal implements Rank, Serializable {
 
     @Override
     public double getDiscount(int period, int N) {
-        if (period>=N){
+        if (period >= N){
             return 0.90;
         }
 
@@ -22,7 +21,7 @@ public class Normal implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if (Math.abs(period) > N ) {
             return 1.00;
         }
 

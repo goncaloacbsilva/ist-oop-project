@@ -26,7 +26,7 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
       }
       _display.display();
     } catch (UnknownObjectKeyException e) {
-      throw new UnknownPartnerKeyException(partnerId);
+      throw new UnknownPartnerKeyException(e.getObjectKey());
     }
   }
 

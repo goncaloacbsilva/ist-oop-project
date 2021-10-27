@@ -2,7 +2,6 @@ package ggc.core.product;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.HashSet;
 
 import ggc.core.product.Product;
 import ggc.core.product.RecipeComponent;

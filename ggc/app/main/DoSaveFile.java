@@ -29,7 +29,7 @@ class DoSaveFile extends Command<WarehouseManager> {
     try {
       try {
         _receiver.save();
-      } catch (MissingFileAssociationException e) {
+      } catch (MissingFileAssociationException ignored) {
         _form.addStringField("filename", Message.newSaveAs());
         _form.parse();
         _receiver.saveAs(_form.stringField("filename"));

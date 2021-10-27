@@ -1,20 +1,15 @@
 package ggc.core;
 
 import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.io.Reader;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.partner.Partner;
-import ggc.core.product.Batch;
 import ggc.core.product.DerivativeProduct;
-import ggc.core.product.Product;
 import ggc.core.product.RecipeComponent;
 import ggc.core.product.SimpleProduct;
 
@@ -26,7 +21,7 @@ public class Parser {
     _store = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException {
+  void parseFile(String filename) throws IOException, BadEntryException, UnknownObjectKeyException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -35,7 +30,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, UnknownObjectKeyException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -68,7 +63,7 @@ public class Parser {
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
-  private void parseSimpleProduct(String[] components, String line) throws BadEntryException {
+  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, UnknownObjectKeyException {
     if (components.length != 5)
       throw new BadEntryException("Invalid number of fields (4) in simple batch description: " + line);
     
@@ -78,30 +73,18 @@ public class Parser {
     int stock = Integer.parseInt(components[4]);
     
     try {
-        _store.getProduct(idProduct);
-    } catch (UnknownObjectKeyException e) {
-        _store.addProduct(new SimpleProduct(idProduct));
-    }
-    
-    Product product = null;
-    Partner partner = null;
-    try {
-        product = _store.getProduct(idProduct);
-        partner = _store.getPartner(idPartner);
-    } catch (UnknownObjectKeyException e) {
-        e.printStackTrace();
-        return;
+      _store.getProduct(idProduct);
+    } catch (UnknownObjectKeyException ignored) {
+      _store.addProduct(new SimpleProduct(idProduct));
     }
 
-    Batch batch = new Batch(partner, product, stock, price);
+    _store.addBatch(idPartner, idProduct, stock, price);
 
-    product.addBatch(batch);
-    partner.addBatch(batch);
   }
  
     
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-  private void parseAggregateProduct(String[] components, String line) throws BadEntryException {
+  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, UnknownObjectKeyException {
     if (components.length != 7)
       throw new BadEntryException("Invalid number of fields (7) in aggregate batch description: " + line);
     
@@ -110,7 +93,7 @@ public class Parser {
 
     try {
         _store.getProduct(idProduct);
-    } catch (UnknownObjectKeyException e) {
+    } catch (UnknownObjectKeyException ignored) {
         Set<RecipeComponent> recipe = new HashSet<>();
         try {
             for (String component : components[6].split("#")) {
@@ -124,22 +107,10 @@ public class Parser {
         _store.addProduct(new DerivativeProduct(idPartner, recipe, Double.parseDouble(components[5])));
     }
     
-    
-    Product product = null;
-    Partner partner = null;
-    try {
-        product = _store.getProduct(idProduct);
-        partner = _store.getPartner(idPartner);
-    } catch (UnknownObjectKeyException e) {
-        e.printStackTrace();
-        return;
-    }
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
 
-    Batch batch = new Batch(partner, product, stock, price);
+    _store.addBatch(idPartner, idProduct, stock, price);
 
-    product.addBatch(batch);
-    partner.addBatch(batch);
   }
 }

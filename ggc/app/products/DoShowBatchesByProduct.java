@@ -26,7 +26,7 @@ class DoShowBatchesByProduct extends Command<WarehouseManager> {
       }
       _display.display();
     } catch (UnknownObjectKeyException e) {
-      throw new UnknownProductKeyException(productId);
+      throw new UnknownProductKeyException(e.getObjectKey());
     }
   }
 
