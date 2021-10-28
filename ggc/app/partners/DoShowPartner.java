@@ -22,7 +22,7 @@ class DoShowPartner extends Command<WarehouseManager> {
   public void execute() throws CommandException {
     String partnerId = stringField("partnerId");
     try {
-      _display.addLine(_receiver.getPartner(partnerId).display());
+      _display.addLine(_receiver.getPartner(partnerId).toString());
       _display.display();
     } catch (UnknownObjectKeyException e) {
       throw new UnknownPartnerKeyException(e.getObjectKey());

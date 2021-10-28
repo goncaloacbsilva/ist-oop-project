@@ -3,12 +3,12 @@ package ggc.app.main;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import pt.tecnico.uilib.forms.Form;
-
 import java.io.IOException;
 
-import ggc.app.exception.FileOpenFailedException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.MissingFileAssociationException;
+
+import ggc.app.exception.FileOpenFailedException;
 
 /**
  * Save current state to file under current name (if unnamed, query for name).
@@ -16,12 +16,10 @@ import ggc.core.exception.MissingFileAssociationException;
 class DoSaveFile extends Command<WarehouseManager> {
 
   String filename;
-  private Form _form;
 
   /** @param receiver */
   DoSaveFile(WarehouseManager receiver) {
     super(Label.SAVE, receiver);
-    _form = new Form();
   }
 
   @Override
@@ -30,13 +28,10 @@ class DoSaveFile extends Command<WarehouseManager> {
       try {
         _receiver.save();
       } catch (MissingFileAssociationException ignored) {
-        _form.addStringField("filename", Message.newSaveAs());
-        _form.parse();
-        _receiver.saveAs(_form.stringField("filename"));
+        _receiver.saveAs(Form.requestString(Message.newSaveAs()));
       }
     } catch (IOException ignored) {
       throw new FileOpenFailedException(_receiver.getFilename());
     }
   }
-
 }

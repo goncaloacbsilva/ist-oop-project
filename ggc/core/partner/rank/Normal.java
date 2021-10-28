@@ -1,6 +1,7 @@
 package ggc.core.partner.rank;
 import java.io.Serializable;
 
+/** Implements Normal class */
 public class Normal implements Rank, Serializable {
     
     /** Serial number for serialization. */
@@ -48,7 +49,7 @@ public class Normal implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if (Math.abs(period) > N) {
             return 1 + Math.abs(period) * 0.10;
         }
 

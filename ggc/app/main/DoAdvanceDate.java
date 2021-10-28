@@ -5,7 +5,7 @@ import pt.tecnico.uilib.menus.CommandException;
 
 import ggc.app.exception.InvalidDateException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
+import ggc.core.exception.InvalidDateValueException;
 
 /**
  * Advance current date.
@@ -21,11 +21,12 @@ class DoAdvanceDate extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     int advanceValue = integerField("advanceValue");
-    if (advanceValue < 0) {
-      throw new InvalidDateException(advanceValue);
+    
+    try {
+      _receiver.advanceDate(advanceValue);
+    } catch (InvalidDateValueException e) {
+      throw new InvalidDateException(e.getValue());
     }
-
-    _receiver.advanceDate(advanceValue);
   }
 
 }

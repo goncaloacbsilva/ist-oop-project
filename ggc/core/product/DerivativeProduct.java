@@ -41,13 +41,14 @@ public class DerivativeProduct extends Product {
      * @return String (idProduto|preço-máximo|stock-actual-total|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n)
      */
     @Override
-    public String display() {
-        String temp = super.display() + "|" + _alpha + "|";
+    public String toString() {
+        String temp = super.toString() + "|" + _alpha + "|";
 
         for(RecipeComponent component : _recipe) {
-            temp += component.getProduct().getId() + ":" + component.getAmmount() + "#";
+            temp += component.getProduct().getId() + ":" + component.getamount() + "#";
         }
 
+        // Remove last "#" and return
         return temp.subSequence(0, temp.length() - 1).toString();
     }
 }

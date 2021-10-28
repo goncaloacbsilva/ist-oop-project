@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ggc.core.product.Batch;
-import ggc.core.exception.BadEntryException;
-import ggc.core.partner.Partner;
 
 /** Implements Product Base (abstract) class */
 public abstract class Product implements Serializable, Comparable<Product> {
@@ -23,9 +21,15 @@ public abstract class Product implements Serializable, Comparable<Product> {
     
     /** Product id */
     private String _id;
+
+    /** Product associated batches */
     private List<Batch> _batches;
 
 
+    /**
+     * Creates a new Product
+     * @param id product id
+     */
     public Product(String id) {
         _id = id;
         _batches = new ArrayList<>();
@@ -59,9 +63,9 @@ public abstract class Product implements Serializable, Comparable<Product> {
     /**
      * Displays Simple Product Information 
      * @return String (idProduto|preço-máximo|stock-actual-total)
-     * @see DerivativeProduct#display()
+     * @see DerivativeProduct#toString()
      */
-    public String display() {
+    public String toString() {
         return getId() + "|" + Math.round(getMaxPrice()) + "|" + getTotalStock();
     }
 
@@ -70,7 +74,7 @@ public abstract class Product implements Serializable, Comparable<Product> {
      * @param batch
      */
     public void addBatch(Batch batch) {
-        _totalStock += batch.getAmmount();
+        _totalStock += batch.getamount();
         if (batch.getUnitPrice() > _maxPrice) {
             _maxPrice = batch.getUnitPrice();
         }
@@ -87,12 +91,8 @@ public abstract class Product implements Serializable, Comparable<Product> {
         Collections.sort(batches);
         return batches;
     }
-
-    public int compareTo(Product product) {
-        return _id.compareTo(product.getId());
-    }
     
-    /* Override equals in order to compare Products by name */
+    /* Override equals in order to compare Products by id */
     @Override
     public boolean equals(Object a) {
 
@@ -111,5 +111,10 @@ public abstract class Product implements Serializable, Comparable<Product> {
     @Override
     public int hashCode() {
         return _id.hashCode();
+    }
+
+    /* Implements Comparable interface method for sorting purposes */
+    public int compareTo(Product product) {
+        return _id.compareTo(product.getId());
     }
 }

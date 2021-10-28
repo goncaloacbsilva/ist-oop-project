@@ -8,17 +8,17 @@ public class RecipeComponent {
     /** Product associated to the recipe component */
     private Product _product;
 
-    /** Product ammount for the recipe */
-    private int _ammount;
+    /** Product amount for the recipe */
+    private int _amount;
 
     /**
      * Creates a Recipe Component
      * @param product product associated
-     * @param ammount product ammount for the recipe
+     * @param amount product amount for the recipe
      */
-    public RecipeComponent(Product product, int ammount) {
+    public RecipeComponent(Product product, int amount) {
         _product = product;
-        _ammount = ammount;
+        _amount = amount;
     }
 
     /**
@@ -30,11 +30,11 @@ public class RecipeComponent {
     }
 
     /**
-     * Get product ammount for the recipe
-     * @return int ammount
+     * Get product amount for the recipe
+     * @return int amount
      */
-    public int getAmmount() {
-        return _ammount;
+    public int getamount() {
+        return _amount;
     }
 
 }

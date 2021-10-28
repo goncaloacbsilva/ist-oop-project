@@ -1,6 +1,7 @@
 package ggc.core.partner.rank;
 import java.io.Serializable;
 
+/** Implements Selection class */
 public class Selection implements Rank, Serializable {
     
     /** Serial number for serialization. */
@@ -8,12 +9,12 @@ public class Selection implements Rank, Serializable {
 
     public double getDiscount(int period, int N) {
         
-        if (period >= N){
+        if (period >= N) {
             return 0.90;
         }
 
         else if (N > period && period >= 0) {
-            if (period >=2 ) {
+            if (period >= 2) {
                 return 0.95;
             }
             else {
@@ -26,7 +27,7 @@ public class Selection implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if(Math.abs(period) > N) {
             return 1.00;
         }
 
@@ -56,7 +57,7 @@ public class Selection implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if(Math.abs(period) > N) {
             return 1 + Math.abs(period) * 0.05;
         }
 
