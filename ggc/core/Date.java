@@ -29,7 +29,7 @@ public class Date implements Serializable {
      * @param value number of days to advance
      * @throws InvalidDateValueException
      */
-    public static void add(int value) throws InvalidDateValueException {
+    static void add(int value) throws InvalidDateValueException {
         if (value <= 0) {
             throw new InvalidDateValueException(value);
         }
