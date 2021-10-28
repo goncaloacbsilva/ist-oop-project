@@ -10,5 +10,5 @@ po-test:   # This job runs in the test stage.
     - echo "Compiling code..."
     - javac -cp po-uilib-v15.jar:. `find ggc -name "*.java"`
     - echo "Running tests"
-    - sudo chmod +x runtests.sh
-    - ./runtests.sh
+    - chmod +x runtests.sh
+    - bash runtests.sh
