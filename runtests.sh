@@ -30,4 +30,8 @@ echo "Total Tests = " $total
 echo "Passed = " $res"%"
 printf "$failures"
 echo "Done."
-
+if [ $correct -eq $total ]; then
+    exit 0;
+else
+    exit 1;
+fi
