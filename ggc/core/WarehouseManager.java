@@ -1,6 +1,5 @@
 package ggc.core;
 
-import java.io.Serializable;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
@@ -8,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 import ggc.core.Warehouse;
 import ggc.core.Date;
@@ -171,7 +169,7 @@ public class WarehouseManager {
     ) {
       _warehouse = (Warehouse) inStream.readObject();
       try {
-        Date.add((int) inStream.readObject());
+        Date.set((int) inStream.readObject());
       } catch (InvalidDateValueException ignored) {
         // This is not possible to happen
       }

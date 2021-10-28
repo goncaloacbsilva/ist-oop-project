@@ -21,7 +21,7 @@ public class Elite implements Rank, Serializable {
             return 0.95;
         }
 
-        else if(Math.abs(period) > N) {
+        else if (Math.abs(period) > N) {
             return 1.00;
         }
 

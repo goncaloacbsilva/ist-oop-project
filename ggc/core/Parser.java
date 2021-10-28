@@ -92,16 +92,16 @@ public class Parser {
     String idPartner = components[2];
 
     try {
-        _store.getProduct(idProduct);
+      _store.getProduct(idProduct);
     } catch (UnknownObjectKeyException ignored) {
-        Set<RecipeComponent> recipe = new HashSet<>();
-        
-        for (String component : components[6].split("#")) {
-            String[] recipeComponent = component.split(":");
-            recipe.add(new RecipeComponent(_store.getProduct(recipeComponent[0]), Integer.parseInt(recipeComponent[1])));
-        }
-        
-        _store.addProduct(new DerivativeProduct(idPartner, recipe, Double.parseDouble(components[5])));
+      Set<RecipeComponent> recipe = new HashSet<>();
+      
+      for (String component : components[6].split("#")) {
+        String[] recipeComponent = component.split(":");
+        recipe.add(new RecipeComponent(_store.getProduct(recipeComponent[0]), Integer.parseInt(recipeComponent[1])));
+      }
+      
+      _store.addProduct(new DerivativeProduct(idPartner, recipe, Double.parseDouble(components[5])));
     }
     
     double price = Double.parseDouble(components[3]);

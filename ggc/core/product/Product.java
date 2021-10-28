@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ggc.core.product.Batch;
-import ggc.core.partner.Partner;
 
 /** Implements Product Base (abstract) class */
 public abstract class Product implements Serializable, Comparable<Product> {

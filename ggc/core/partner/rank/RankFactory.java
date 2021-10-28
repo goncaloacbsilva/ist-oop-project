@@ -1,6 +1,9 @@
 package ggc.core.partner.rank;
 
-import ggc.core.partner.rank.*;
+import ggc.core.partner.rank.Rank;
+import ggc.core.partner.rank.Normal;
+import ggc.core.partner.rank.Elite;
+import ggc.core.partner.rank.Selection;
 
 /** Implements RankFactory class */
 public class RankFactory {
@@ -17,7 +20,7 @@ public class RankFactory {
         else if (25000 >= points && points > 2000) {
             return new Selection();
         }
-        else if (2000 >= points && points >=0) {
+        else if (2000 >= points && points >= 0) {
             return new Normal();
         }
         

@@ -1,13 +1,11 @@
 package ggc.core;
 
-import java.io.Serializable;
-
 import ggc.core.exception.InvalidDateValueException;
 
 /**
  * Implements Date object
  */
-public class Date implements Serializable {
+public class Date {
     private static final long serialVersionUID = 202109192006L;
 
     /** Global value shared by all Date instances */
@@ -25,8 +23,8 @@ public class Date implements Serializable {
     }
 
     /**
-     * Advances the global value a given number of days
-     * @param value number of days to advance
+     * Advances the global value a given number
+     * @param value
      * @throws InvalidDateValueException
      */
     static void add(int value) throws InvalidDateValueException {
@@ -35,6 +33,20 @@ public class Date implements Serializable {
         }
         _globalValue += value;
     }
+
+    /**
+     * Set the global value to a given number
+     * @param value number
+     * @throws InvalidDateValueException
+     */
+    static void set(int value) throws InvalidDateValueException {
+        if (value < 0) {
+            throw new InvalidDateValueException(value);
+        }
+        _globalValue = value;
+    }
+
+
 
     /**
      * Calculates the difference between two dates (local)

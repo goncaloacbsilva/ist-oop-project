@@ -57,7 +57,7 @@ public class Selection implements Rank, Serializable {
 
         }
 
-        else if(Math.abs(period) >N ) {
+        else if(Math.abs(period) > N) {
             return 1 + Math.abs(period) * 0.05;
         }
 
