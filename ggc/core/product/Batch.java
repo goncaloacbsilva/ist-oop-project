@@ -10,54 +10,62 @@ public class Batch implements Serializable, Comparable<Batch> {
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
 
-    /** Batch suplier */
-    private Partner _suplier;
+    /** Batch supplier */
+    private Partner _supplier;
 
     /** Batch associated product */
     private Product _product;
 
-    /** Total ammount of product units */
-    private int _ammount;
+    /** Total amount of product units */
+    private int _amount;
 
     /** Price per unit */
     private double _unitPrice;
 
     /**
      * Creates a new Product Batch
-     * @param suplier Partner associated to the batch
+     * @param supplier Partner associated to the batch
      * @param product Product associated to the batch
-     * @param ammount Ammount of product units
+     * @param amount amount of product units
      * @param unitPrice Price per unit
      */
-    public Batch(Partner suplier, Product product, int ammount, double unitPrice) {
-        _suplier = suplier;
+    public Batch(Partner supplier, Product product, int amount, double unitPrice) {
+        _supplier = supplier;
         _product = product;
-        _ammount = ammount;
+        _amount = amount;
         _unitPrice = unitPrice;
     }
 
     /**
-     * Get ammount of product units
-     * @return int ammount
+     * Get amount of product units
+     * @return amount
      */
-    public int getAmmount() {
-        return _ammount;
+    public int getamount() {
+        return _amount;
     }
 
     /**
      * Get price per unit
-     * @return double price
+     * @return price
      */
     public double getUnitPrice() {
         return _unitPrice;
     }
 
+    /**
+     * Get batch associated Product id
+     * @return product id
+     */
     public String getProductId() {
         return _product.getId();
     }
 
-    public String getSuplierId() {
-        return _suplier.getId();
+    /**
+     * Get batch associated Partner (supplier) id 
+     * @return supplier id
+     */
+    public String getsupplierId() {
+        return _supplier.getId();
     }
 
     /**
@@ -66,19 +74,23 @@ public class Batch implements Serializable, Comparable<Batch> {
      */
     @Override
     public String toString() {
-        return _product.getId() + "|" + _suplier.getId() + "|" + Math.round(_unitPrice) + "|" + _ammount;
+        return _product.getId() + "|" + _supplier.getId() + "|" + Math.round(_unitPrice) + "|" + _amount;
     }
 
+    /* Implements Comparable interface method for sorting purposes */
     public int compareTo(Batch batch) {
         if (getProductId().equalsIgnoreCase(batch.getProductId())) {
-            if (getSuplierId().equalsIgnoreCase(batch.getSuplierId())) {
+            // Product Id is the same, compare by supplier Id
+            if (getsupplierId().equalsIgnoreCase(batch.getsupplierId())) {
+                // supplier Id is the same, compare by Unit price
                 if (Math.round(getUnitPrice()) == Math.round(batch.getUnitPrice())) {
-                    return getAmmount() - batch.getAmmount();
+                    // Unit price is the same, compare by amount
+                    return getamount() - batch.getamount();
                 } else {
                     return (int) (Math.round(getUnitPrice()) - Math.round(batch.getUnitPrice()));
                 }
             } else {
-                return getSuplierId().compareTo(batch.getSuplierId());
+                return getsupplierId().compareTo(batch.getsupplierId());
             }
         } else {
             return getProductId().compareTo(batch.getProductId());

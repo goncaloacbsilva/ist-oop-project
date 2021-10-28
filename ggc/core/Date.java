@@ -2,6 +2,8 @@ package ggc.core;
 
 import java.io.Serializable;
 
+import ggc.core.exception.InvalidDateValueException;
+
 /**
  * Implements Date object
  */
@@ -21,8 +23,12 @@ public class Date implements Serializable {
      * Advances a given number of days
      * @param value number of days to advance
      * @return new Date object
+     * @throws InvalidDateValueException
      */
-    public Date add(int value) {
+    public Date add(int value) throws InvalidDateValueException {
+        if (value <= 0) {
+            throw new InvalidDateValueException(value);
+        }
         return new Date(_value + value);
     }
 

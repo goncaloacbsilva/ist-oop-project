@@ -1,6 +1,7 @@
 package ggc.core.partner.rank;
 import java.io.Serializable;
 
+/** Implements Normal class */
 public class Normal implements Rank, Serializable {
     
     /** Serial number for serialization. */

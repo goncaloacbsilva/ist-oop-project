@@ -19,6 +19,7 @@ import ggc.core.partner.Partner;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
+import ggc.core.exception.InvalidDateValueException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.MissingFileAssociationException;
@@ -32,45 +33,95 @@ public class WarehouseManager {
   /** The wharehouse itself. */
   private Warehouse _warehouse = new Warehouse();
 
+  /**
+   * Get the current date object
+   * @return Date
+   */
   public Date getDate() {
     return _warehouse.getDate().now();
   }
 
-  public void advanceDate(int value) {
+  /**
+   * Advance Warehouse date with the supplied value
+   * @param value
+   * @throws InvalidDateValueException
+   * @see Warehouse#advanceDate(int value)
+   */
+  public void advanceDate(int value) throws InvalidDateValueException {
     _warehouse.advanceDate(value);
   }
 
+  /**
+   * Get the name of the current program associated file
+   * @return filename
+   */
   public String getFilename() {
     return _filename;
   }
 
+  /**
+   * Get Warehouse products list
+   * @return products list
+   * @see Warehouse#getProducts()
+   */
   public List<Product> getProducts() {
     return _warehouse.getProducts();
   }
-
-  public List<Batch> getAvailableBatches() {
-    return _warehouse.getAvailableBatches();
-  }
-
+  
+  /**
+   * Get Warehouse partners list
+   * @return partners list
+   * @see Warehouse#getPartners()
+   */
   public List<Partner> getPartners() {
     return _warehouse.getPartners();
   }
 
+  /**
+   * Get all available warehouse batches 
+   * @return batches list
+   * @see Warehouse#getAvailableBatches()
+   */
+  public List<Batch> getAvailableBatches() {
+    return _warehouse.getAvailableBatches();
+  }
+
+
+  /**
+   * Get a specific partner by its id
+   * @param id partner id
+   * @return Partner
+   * @throws UnknownObjectKeyException
+   * @see Warehouse#getPartner(String id)
+   */
   public Partner getPartner(String id) throws UnknownObjectKeyException {
     return _warehouse.getPartner(id);
   }
 
+  /**
+   * Get a specific product by its id
+   * @param id product id
+   * @return Product
+   * @throws UnknownObjectKeyException
+   * @see Warehouse#getProduct(String id)
+   */
   public Product getProduct(String id) throws UnknownObjectKeyException {
     return _warehouse.getProduct(id);
   }
 
-
+  /**
+   * Register a new Partner on the Warehouse
+   * @param partner Partner object
+   * @return if the operation was successful or not
+   * @see Warehouse#addPartner(Partner partner)
+   */
   public boolean addPartner(String id, String name, String address){
     return _warehouse.addPartner(new Partner(id, name, address));
   }
 
 
   /**
+   * Save current state on the associated file
    * @throws IOException
    * @throws FileNotFoundException
    * @throws MissingFileAssociationException
@@ -88,10 +139,12 @@ public class WarehouseManager {
   }
 
   /**
-   * @@param filename
-   * @@throws MissingFileAssociationException
-   * @@throws IOException
-   * @@throws FileNotFoundException
+   * Associate a file and save current state
+   * @param filename
+   * @throws MissingFileAssociationException
+   * @throws IOException
+   * @throws FileNotFoundException
+   * @see WarehouseManager#save()
    */
   public void saveAs(String filename) throws FileNotFoundException, IOException {
     _filename = filename;
@@ -103,8 +156,9 @@ public class WarehouseManager {
   }
 
   /**
-   * @@param filename
-   * @@throws UnavailableFileException
+   * Load state from file
+   * @param filename
+   * @throws UnavailableFileException
    */
   public void load(String filename) throws UnavailableFileException, ClassNotFoundException  {
     try (
@@ -121,6 +175,7 @@ public class WarehouseManager {
   }
 
   /**
+   * Loads entities from text file
    * @param textfile
    * @throws ImportFileException
    */
