@@ -38,7 +38,7 @@ public class WarehouseManager {
    * @return Date
    */
   public Date getDate() {
-    return _warehouse.getDate().now();
+    return Date.now();
   }
 
   /**
@@ -48,7 +48,7 @@ public class WarehouseManager {
    * @see Warehouse#advanceDate(int value)
    */
   public void advanceDate(int value) throws InvalidDateValueException {
-    _warehouse.advanceDate(value);
+    Date.add(value);
   }
 
   /**
@@ -135,18 +135,22 @@ public class WarehouseManager {
       ObjectOutputStream outStream = new ObjectOutputStream(outFile)
     ) {
       outStream.writeObject(_warehouse);
+      outStream.writeObject(Date.now().getValue());
     }
   }
 
   /**
    * Associate a file and save current state
    * @param filename
-   * @throws MissingFileAssociationException
    * @throws IOException
    * @throws FileNotFoundException
    * @see WarehouseManager#save()
    */
   public void saveAs(String filename) throws FileNotFoundException, IOException {
+    // Avoid MissingFileAssociationException when the supplied filename is empty
+    if (filename.isEmpty())
+      throw new FileNotFoundException();
+    
     _filename = filename;
     try {
       save();
@@ -166,6 +170,11 @@ public class WarehouseManager {
       ObjectInputStream inStream = new ObjectInputStream(inFile)
     ) {
       _warehouse = (Warehouse) inStream.readObject();
+      try {
+        Date.add((int) inStream.readObject());
+      } catch (InvalidDateValueException ignored) {
+        // This is not possible to happen
+      }
       _filename = filename;
     } catch (IOException ignored) {
       throw new UnavailableFileException(filename);

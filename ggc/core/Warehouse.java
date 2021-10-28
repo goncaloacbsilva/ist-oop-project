@@ -15,7 +15,6 @@ import ggc.core.product.Product;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
 import ggc.core.exception.BadEntryException;
-import ggc.core.exception.InvalidDateValueException;
 import ggc.core.exception.UnknownObjectKeyException;
 
 /**
@@ -25,9 +24,6 @@ public class Warehouse implements Serializable {
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202109192006L;
-
-  /** Warehouse date object */
-  private Date _date;
 
   /** Warehouse products */
   private Set<Product> _products;
@@ -39,26 +35,8 @@ public class Warehouse implements Serializable {
    * Creates a new Warehouse
    */
   public Warehouse() {
-    _date = new Date(0);
     _products = new HashSet<>();
     _partners = new HashSet<>();
-  }
-
-  /**
-   * Get date object
-   * @return Date
-   */
-  public Date getDate() {
-    return _date;
-  }
-
-  /**
-   * Advance date with the supplied value
-   * @param value
-   * @throws InvalidDateValueException
-   */
-  public void advanceDate(int value) throws InvalidDateValueException {
-    _date = _date.add(value);
   }
 
   /**
