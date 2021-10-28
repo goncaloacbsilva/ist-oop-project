@@ -70,6 +70,6 @@ public class Normal implements Rank, Serializable {
 
     @Override
     public double getPointsPenalty(int period){
-        return 0;
+        return 0*period;
     }
 }
