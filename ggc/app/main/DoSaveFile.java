@@ -2,8 +2,6 @@ package ggc.app.main;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-import pt.tecnico.uilib.forms.Form;
-
 import java.io.IOException;
 
 import ggc.app.exception.FileOpenFailedException;
@@ -16,12 +14,19 @@ import ggc.core.exception.MissingFileAssociationException;
 class DoSaveFile extends Command<WarehouseManager> {
 
   String filename;
-  private Form _form;
 
   /** @param receiver */
   DoSaveFile(WarehouseManager receiver) {
     super(Label.SAVE, receiver);
-    _form = new Form();
+    if (_receiver.getFilename().isEmpty()) {
+      /* 
+       * IMPORTANT NOTE:
+       * This logic is useless
+       * If the program is already associated to a file it still asks for filename but will not use it.
+       * The Command class doesn't provide any method to deal with this issue.
+       */
+      addStringField("filename", Message.newSaveAs());
+    }
   }
 
   @Override
@@ -30,13 +35,10 @@ class DoSaveFile extends Command<WarehouseManager> {
       try {
         _receiver.save();
       } catch (MissingFileAssociationException ignored) {
-        _form.addStringField("filename", Message.newSaveAs());
-        _form.parse();
-        _receiver.saveAs(_form.stringField("filename"));
+        _receiver.saveAs(stringField("filename"));
       }
     } catch (IOException ignored) {
       throw new FileOpenFailedException(_receiver.getFilename());
     }
   }
-
 }
