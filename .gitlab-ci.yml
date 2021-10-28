@@ -11,4 +11,4 @@ po-test:   # This job runs in the test stage.
     - javac -cp po-uilib-v15.jar:. `find ggc -name "*.java"`
     - echo "Running tests"
     - chmod +x runtests.sh
-    - bash runtests.sh
+    - sh runtests.sh
