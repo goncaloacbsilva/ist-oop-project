@@ -43,7 +43,6 @@ public class WarehouseManager {
    * Advance Warehouse date with the supplied value
    * @param value
    * @throws InvalidDateValueException
-   * @see Warehouse#advanceDate(int value)
    */
   public void advanceDate(int value) throws InvalidDateValueException {
     Date.add(value);
@@ -161,6 +160,7 @@ public class WarehouseManager {
    * Load state from file
    * @param filename
    * @throws UnavailableFileException
+   * @throws ClassNotFoundException
    */
   public void load(String filename) throws UnavailableFileException, ClassNotFoundException  {
     try (
@@ -185,6 +185,7 @@ public class WarehouseManager {
    * Loads entities from text file
    * @param textfile
    * @throws ImportFileException
+   * @throws BadEntryException
    */
   public void importFile(String textfile) throws ImportFileException, BadEntryException {
     Parser parser = new Parser(_warehouse);
