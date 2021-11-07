@@ -110,11 +110,11 @@ public abstract class Product implements Serializable, Comparable<Product> {
     /* Override hashCode to compare Product objects by their id */
     @Override
     public int hashCode() {
-        return _id.hashCode();
+        return _id.toLowerCase().hashCode();
     }
 
     /* Implements Comparable interface method for sorting purposes */
     public int compareTo(Product product) {
-        return _id.compareTo(product.getId());
+        return _id.compareToIgnoreCase(product.getId());
     }
 }

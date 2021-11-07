@@ -188,18 +188,18 @@ public class Partner implements Serializable, Comparable<Partner> {
             return false;
         }
 
-        return ((Partner)a).getId().equalsIgnoreCase(_id.toLowerCase());
+        return ((Partner)a).getId().equalsIgnoreCase(_id);
     }
 
     /* Override hashCode to compare Partner objects by their id */
     @Override
     public int hashCode() {
-        return _id.hashCode();
+        return _id.toLowerCase().hashCode();
     }
 
     /* Implements Comparable interface method for sorting purposes */
     public int compareTo(Partner partner) {
-        return _id.compareTo(partner.getId());
+        return _id.compareToIgnoreCase(partner.getId());
     }
     
 }
