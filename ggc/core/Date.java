@@ -53,6 +53,7 @@ public class Date {
      * @param date Date to compare
      * @return absolute difference between dates 
      */
+    
     public int difference(Date date) {
         return Math.abs(date.getValue() - _localValue);
     }
