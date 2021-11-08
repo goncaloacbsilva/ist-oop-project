@@ -7,7 +7,6 @@ import java.util.List;
 
 import ggc.core.partner.rank.Normal;
 import ggc.core.partner.rank.Rank;
-import ggc.core.partner.rank.RankFactory;
 import ggc.core.product.Batch;
 
 /** Implements Partner class */
