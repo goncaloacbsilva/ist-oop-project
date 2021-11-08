@@ -17,18 +17,13 @@ Escolha uma opção: Gestão de Parceiros
 5 - Mostrar compras com parceiro
 6 - Mostrar vendas (e desagregações) com parceiro
 0 - Sair
-Escolha uma opção: Gestão de Parceiros
-1 - Mostrar parceiro
-2 - Mostrar parceiros
-3 - Registar parceiro
-4 - Activa/desactivar notificações de um produto
-5 - Mostrar compras com parceiro
-6 - Mostrar vendas (e desagregações) com parceiro
-0 - Sair
-Escolha uma opção: Número inválido!
-Escolha uma opção: Número inválido!
-Escolha uma opção: Número inválido!
-Escolha uma opção: Gestão de Parceiros
+Escolha uma opção: M1|Rohit Figueiredo|New Delhi, India|NORMAL|0|0|0|0
+P1|Lages do Chão|Lisboa, Portugal|NORMAL|0|0|0|0
+P3|Brian Rocks|Koln, Germany|NORMAL|0|0|0|0
+R2|Jorge Figueiredo|Lisboa, Portugal|NORMAL|0|0|0|0
+S1|Toshiba|Tokyo, Japan|NORMAL|0|0|0|0
+W2|Pedraria Fonseca|Oeiras, Portugal|NORMAL|0|0|0|0
+Gestão de Parceiros
 1 - Mostrar parceiro
 2 - Mostrar parceiros
 3 - Registar parceiro
@@ -47,5 +42,4 @@ Escolha uma opção: Menu Principal
 8 - Menu de Consultas
 9 - Ver Saldo Global
 0 - Sair
-Escolha uma opção: Número inválido!
 Escolha uma opção: 

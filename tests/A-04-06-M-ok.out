@@ -15,7 +15,18 @@ Escolha uma opção: Gestão de Produtos
 3 - Visualizar lotes fornecidos por parceiro
 4 - Visualizar lotes de um dado produto
 0 - Sair
-Escolha uma opção: Gestão de Produtos
+Escolha uma opção: ROLHA|M1|100|100
+ROLHA|M1|500|100
+ROLHA|M1|1000|100
+ROLHA|M1|2000|500
+TRALHA|S2|20|500
+TRALHA|S2|50|100
+TRALHA|S2|100|10
+TRALHA|S2|100|50
+TRALHA|S2|100|100
+TRALHA|S2|200|500
+TRALHA|S2|2000|500
+Gestão de Produtos
 1 - Visualizar todos os produtos
 2 - Visualizar todos os lotes
 3 - Visualizar lotes fornecidos por parceiro
