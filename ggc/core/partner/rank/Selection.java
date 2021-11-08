@@ -1,5 +1,6 @@
 package ggc.core.partner.rank;
 import java.io.Serializable;
+import ggc.core.partner.Partner;
 
 /** Implements Selection class */
 public class Selection implements Rank, Serializable {
@@ -70,15 +71,21 @@ public class Selection implements Rank, Serializable {
         return "SELECTION";
     }
 
-    public Boolean checkRankMatch(int points){
-        return (25000 >= points && points > 2000);
-    }
-
+    
     public double getPointsPenalty(int period){
         if(period < -2) {
             return 0.10;
         } else {
             return 1;
+        }
+    }
+
+
+    public void updateRank(Partner partner, int points) {
+        if (25000 < points) {
+            partner.setRank(new Elite());
+        } else if (points <= 2000) {
+            partner.setRank(new Normal());
         }
     }
 }

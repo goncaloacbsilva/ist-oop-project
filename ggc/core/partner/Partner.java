@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ggc.core.partner.rank.Normal;
 import ggc.core.partner.rank.Rank;
-import ggc.core.partner.rank.RankFactory;
 import ggc.core.product.Batch;
 
 /** Implements Partner class */
@@ -53,7 +53,7 @@ public class Partner implements Serializable, Comparable<Partner> {
         _name = name;
         _address = address;
         _batches = new ArrayList<>();
-        _rank = RankFactory.getRank(0);
+        _rank = new Normal();
     }
 
     /**
@@ -142,10 +142,16 @@ public class Partner implements Serializable, Comparable<Partner> {
      * Check if the current rank is still valid (for the current points)
      * and updates partner rank according to his points
      */
-    private void updateRank(){
-        if (!_rank.checkRankMatch(_points)){
-            _rank = RankFactory.getRank(_points);
-        }
+    private void updateRank() {
+        _rank.updateRank(this, _points);
+    }
+
+    /**
+     * Sets the partner rank
+     * @param newRank
+     */
+    public void setRank(Rank newRank) {
+        _rank = newRank;
     }
 
     /**
