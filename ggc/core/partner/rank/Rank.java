@@ -1,4 +1,5 @@
 package ggc.core.partner.rank;
+import ggc.core.partner.Partner;
 
 /** Rank interface */
 public interface Rank {
@@ -38,5 +39,5 @@ public interface Rank {
      * @param points
      * @return true (valid) / false (not valid)
      */
-    public Boolean checkRankMatch(int points);
+    public void updateRank(Partner partner, int points);
 }
