@@ -39,6 +39,8 @@ public class Partner implements Serializable, Comparable<Partner> {
     /** Partner Batches */
     private List<Batch> _batches;
 
+    
+
     /** Partner Rank */
     private Rank _rank;
 

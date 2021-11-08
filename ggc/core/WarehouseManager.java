@@ -116,6 +116,13 @@ public class WarehouseManager {
     return _warehouse.addPartner(new Partner(id, name, address));
   }
 
+  
+  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException {
+    // Create batch
+    // Remove price from Warehouse credit
+    // Add new transaction to warehouse and partner
+  }
+
 
   /**
    * Save current state on the associated file
