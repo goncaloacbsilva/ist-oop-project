@@ -17,7 +17,19 @@ Escolha uma opção: Gestão de Parceiros
 5 - Mostrar compras com parceiro
 6 - Mostrar vendas (e desagregações) com parceiro
 0 - Sair
-Escolha uma opção: Gestão de Parceiros
+Escolha uma opção: continente|SONAE|Porto, Portugal|NORMAL|0|0|0|0
+luke|Luke Skywalker|Lisboa, Portugal|NORMAL|0|0|0|0
+M1|Rohit Figueiredo|New Delhi, India|NORMAL|0|0|0|0
+P1|Lages do Chão|Lisboa, Portugal|NORMAL|0|0|0|0
+P3|Brian Rocks|Koln, Germany|NORMAL|0|0|0|0
+R2|Jorge Figueiredo|Lisboa, Portugal|NORMAL|0|0|0|0
+S1|Toshiba|Tokyo, Japan|NORMAL|0|0|0|0
+sssssSSSSSS1|Toshiba|Tokyo, Japan|NORMAL|0|0|0|0
+uma|Darth Vader|New Delhi, India|NORMAL|0|0|0|0
+W2|Pedraria Fonseca|Oeiras, Portugal|NORMAL|0|0|0|0
+Yoda|Yoda|Lisboa, Portugal|NORMAL|0|0|0|0
+YODI|Yodi|Lisboa, Portugal|NORMAL|0|0|0|0
+Gestão de Parceiros
 1 - Mostrar parceiro
 2 - Mostrar parceiros
 3 - Registar parceiro

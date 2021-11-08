@@ -9,6 +9,19 @@ Menu Principal
 8 - Menu de Consultas
 9 - Ver Saldo Global
 0 - Sair
+Escolha uma opção: Gestão de Produtos
+1 - Visualizar todos os produtos
+2 - Visualizar todos os lotes
+3 - Visualizar lotes fornecidos por parceiro
+4 - Visualizar lotes de um dado produto
+0 - Sair
+Escolha uma opção: ROLHA|5000|800
+Gestão de Produtos
+1 - Visualizar todos os produtos
+2 - Visualizar todos os lotes
+3 - Visualizar lotes fornecidos por parceiro
+4 - Visualizar lotes de um dado produto
+0 - Sair
 Escolha uma opção: Menu Principal
 1 - Abrir
 2 - Guardar
@@ -20,5 +33,4 @@ Escolha uma opção: Menu Principal
 8 - Menu de Consultas
 9 - Ver Saldo Global
 0 - Sair
-Escolha uma opção: Número inválido!
 Escolha uma opção: 
