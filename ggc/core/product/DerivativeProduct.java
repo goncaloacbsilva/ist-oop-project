@@ -35,6 +35,10 @@ public class DerivativeProduct extends Product {
         return _recipe;
     }
 
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
 
     /**
      * Displays Derivative Product Information

@@ -21,6 +21,7 @@ import ggc.core.exception.InvalidDateValueException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.MissingFileAssociationException;
+import ggc.core.exception.NotEnoughResourcesException;
 
 /** Façade for access. */
 public class WarehouseManager {
@@ -116,13 +117,27 @@ public class WarehouseManager {
     return _warehouse.addPartner(new Partner(id, name, address));
   }
 
+  /**
+   * Register a new Product on the Warehouse
+   * @param product Product object
+   * @return if the operation was successful or not
+   * @see Warehouse#addProduct(Product product) 
+   */
+  public boolean addProduct(Product product) {
+    return _warehouse.addProduct(product);
+  }
   
-  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException {
-    // Create batch
-    // Remove price from Warehouse credit
-    // Add new transaction to warehouse and partner
+  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException, NotEnoughResourcesException {
+    _warehouse.registerAcquisition(partnerId, productId, price, amount);
   }
 
+  public void registerSaleByCredit(String partnerId, String productId, int paymentDeadline, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+    _warehouse.registerSaleByCredit(partnerId, productId, paymentDeadline, amount);
+  }
+
+  public String viewTransaction(int transactionId) throws UnknownObjectKeyException {
+    return _warehouse.viewTransaction(transactionId);
+  }
 
   /**
    * Save current state on the associated file

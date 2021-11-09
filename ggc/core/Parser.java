@@ -100,8 +100,7 @@ public class Parser {
         String[] recipeComponent = component.split(":");
         recipe.add(new RecipeComponent(_store.getProduct(recipeComponent[0]), Integer.parseInt(recipeComponent[1])));
       }
-      
-      _store.addProduct(new DerivativeProduct(idPartner, recipe, Double.parseDouble(components[5])));
+      _store.addProduct(new DerivativeProduct(idProduct, recipe, Double.parseDouble(components[5])));
     }
     
     double price = Double.parseDouble(components[3]);

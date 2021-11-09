@@ -40,8 +40,16 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get amount of product units
      * @return amount
      */
-    public int getamount() {
+    public int getAmount() {
         return _amount;
+    }
+
+    public void addAmount(int amount) {
+        _amount += amount;
+    }
+
+    public void takeAmount(int amount) {
+        _amount -= amount;
     }
 
     /**
@@ -64,7 +72,7 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get batch associated Partner (supplier) id 
      * @return supplier id
      */
-    public String getsupplierId() {
+    public String getSupplierId() {
         return _supplier.getId();
     }
 
@@ -81,16 +89,16 @@ public class Batch implements Serializable, Comparable<Batch> {
     public int compareTo(Batch batch) {
         if (getProductId().equalsIgnoreCase(batch.getProductId())) {
             // Product Id is the same, compare by supplier Id
-            if (getsupplierId().equalsIgnoreCase(batch.getsupplierId())) {
+            if (getSupplierId().equalsIgnoreCase(batch.getSupplierId())) {
                 // supplier Id is the same, compare by Unit price
                 if (Math.round(getUnitPrice()) == Math.round(batch.getUnitPrice())) {
                     // Unit price is the same, compare by amount
-                    return getamount() - batch.getamount();
+                    return getAmount() - batch.getAmount();
                 } else {
                     return (int) (Math.round(getUnitPrice()) - Math.round(batch.getUnitPrice()));
                 }
             } else {
-                return getsupplierId().compareTo(batch.getsupplierId());
+                return getSupplierId().compareTo(batch.getSupplierId());
             }
         } else {
             return getProductId().compareTo(batch.getProductId());

@@ -2,12 +2,22 @@ package ggc.core.partner;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import ggc.core.exception.NotEnoughResourcesException;
+import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.exception.UnknownObjectKeyException.ObjectType;
 import ggc.core.partner.rank.Normal;
 import ggc.core.partner.rank.Rank;
 import ggc.core.product.Batch;
+import ggc.core.product.comparators.OrderByLowerPriceFirst;
+import ggc.core.transaction.Transaction;
 
 /** Implements Partner class */
 public class Partner implements Serializable, Comparable<Partner> {
@@ -39,7 +49,7 @@ public class Partner implements Serializable, Comparable<Partner> {
     /** Partner Batches */
     private List<Batch> _batches;
 
-    
+    private Set<Transaction> _transactions;
 
     /** Partner Rank */
     private Rank _rank;
@@ -55,6 +65,7 @@ public class Partner implements Serializable, Comparable<Partner> {
         _name = name;
         _address = address;
         _batches = new ArrayList<>();
+        _transactions = new HashSet<>();
         _rank = new Normal();
     }
 
@@ -116,10 +127,10 @@ public class Partner implements Serializable, Comparable<Partner> {
 
     /**
      * Get partner rank name
-     * @return rank name
+     * @return rank
      */
-    public String getRank(){
-        return _rank.getRankName();
+    public Rank getRank() {
+        return _rank;
     }
 
     /**
@@ -176,12 +187,83 @@ public class Partner implements Serializable, Comparable<Partner> {
         updateRank();
     }
 
+    public void addTransaction(Transaction transaction) {
+        _transactions.add(transaction);
+    }
+
+
+    public int takeBatchAmount(Batch batch, int amount) {
+        int remain = amount - batch.getAmount();
+        if (remain > 0) {
+            _batches.remove(batch);
+        } else {
+            remain = 0;
+            batch.takeAmount(amount);
+        }
+        return remain;
+    }
+
+    public boolean hasAvailableStock(List<Batch> productBatches, int amount) {
+        int total = 0;
+        for (Batch batch : productBatches) {
+            total += batch.getAmount();
+            
+        }
+        return (total >= amount);
+    }
+
+    public List<Batch> getProductBatches(String productId) {
+        List<Batch> tempBatches;
+        tempBatches = new ArrayList<>();
+        for (Batch batch : _batches) {
+            if (batch.getProductId().equals(productId)) {
+                tempBatches.add(batch);
+            }
+        }
+        return tempBatches;
+    }
+
+    /**
+     * Sells a specific amount of partner product
+     * @param productId
+     * @param amount
+     * @return total transaction price
+     * @throws NotEnoughResourcesException
+     * @throws UnknownObjectKeyException
+     */
+    public double sellBatch(String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+        List<Batch> tempBatches = getProductBatches(productId);
+        if (hasAvailableStock(tempBatches, amount)) {
+            int remain = amount;
+            double price = 0.0;
+
+            Collections.sort(tempBatches, new OrderByLowerPriceFirst());
+            Iterator<Batch> batchIterator = tempBatches.iterator();
+
+            while (batchIterator.hasNext()) {
+                Batch batch = batchIterator.next();
+                double batchPrice = batch.getUnitPrice();
+                int previousRemain = remain;
+                remain = takeBatchAmount(batch, remain);
+                price += batchPrice * (previousRemain - remain);
+                if (remain == 0) {
+                    break;
+                }
+            }
+
+            return price;
+
+        } else {
+            throw new NotEnoughResourcesException(_id, amount, 1000);
+        }
+    }
+
     /**
      * Displays Partner Information
      * @return String (id|nome|endereço|estatuto|pontos|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas)
      */
     public String toString() {
-        return getId() + "|" + getName() + "|" + getAddress() + "|" + getRank() + "|" + 
+        return getId() + "|" + getName() + "|" + getAddress() + "|" + getRank().getRankName() + "|" + 
         getPoints() + "|" + Math.round(getTotalPurchases()) + "|" + Math.round(getTotalSales()) + "|" + Math.round(getPaidSales());
     }
 

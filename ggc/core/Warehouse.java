@@ -7,15 +7,23 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import ggc.core.Date;
 import ggc.core.Parser;
 import ggc.core.product.Product;
+import ggc.core.product.comparators.OrderByLowerPriceFirst;
+import ggc.core.transaction.Acquisition;
+import ggc.core.transaction.SaleByCredit;
+import ggc.core.transaction.Transaction;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.exception.UnknownObjectKeyException.ObjectType;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -30,6 +38,17 @@ public class Warehouse implements Serializable {
 
   /** Warehouse associated partners */
   private Set<Partner> _partners;
+  
+
+  private int _nextTransactionId;
+
+  private double _acquisitionsBalance;
+
+  private double _salesAccountingBalance;
+
+  private double _salesBalance;
+
+  private Set<Transaction> _transactions;
 
   /**
    * Creates a new Warehouse
@@ -37,6 +56,7 @@ public class Warehouse implements Serializable {
   public Warehouse() {
     _products = new HashSet<>();
     _partners = new HashSet<>();
+    _transactions = new HashSet<>();
   }
 
   /**
@@ -71,7 +91,7 @@ public class Warehouse implements Serializable {
         return product;
       }
     }
-    throw new UnknownObjectKeyException(id);
+    throw new UnknownObjectKeyException(id, ObjectType.PRODUCT);
   }
 
   /**
@@ -86,7 +106,7 @@ public class Warehouse implements Serializable {
         return partner;
       }
     }
-    throw new UnknownObjectKeyException(id);
+    throw new UnknownObjectKeyException(id, ObjectType.PARTNER);
   }
 
   /**
@@ -136,6 +156,51 @@ public class Warehouse implements Serializable {
     }
     Collections.sort(batchList);
     return batchList;
+  }
+
+  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+    // Get Transaction Entities info
+    Partner supplier = getPartner(partnerId);
+    Product product = getProduct(productId);
+
+    // Process operation
+    double totalPrice = supplier.sellBatch(productId, amount);
+    _acquisitionsBalance += totalPrice;
+    // Update inventory
+    product.addBatch(new Batch(supplier, product, amount, price));
+
+    // Register transaction
+    Transaction acquisitionTransaction = new Acquisition(_nextTransactionId++, product, amount, supplier, Date.now().getValue(), totalPrice);
+
+    _transactions.add(acquisitionTransaction);
+    supplier.addTransaction(acquisitionTransaction);
+  }
+
+  public void registerSaleByCredit(String partnerId, String productId, int paymentDeadline, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+    // Get Transaction Entities info
+    Partner partner = getPartner(partnerId);
+    Product product = getProduct(productId);
+    
+    // Check stocks
+    if (!product.hasAvailableStock(amount)) {
+      throw new NotEnoughResourcesException(productId, amount, product.getTotalStock());
+    }
+    
+    // Update inventory
+    double basePrice = product.sellAmount(amount);
+
+    Transaction saleTransaction = new SaleByCredit(_nextTransactionId++, product, amount, partner, basePrice, paymentDeadline);
+    _transactions.add(saleTransaction);
+    partner.addTransaction(saleTransaction);
+  }
+
+  public String viewTransaction(int transactionId) throws UnknownObjectKeyException {
+    for (Transaction transaction : _transactions) {
+      if (transaction.getId() == transactionId) {
+        return transaction.toString();
+      }
+    }
+    throw new UnknownObjectKeyException(Integer.toString(transactionId), ObjectType.TRANSACTION);
   }
 
   /**
