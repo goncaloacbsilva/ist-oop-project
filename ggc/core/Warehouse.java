@@ -140,7 +140,7 @@ public class Warehouse implements Serializable {
     Partner partner = getPartner(idPartner);
     Batch batch = new Batch(partner, product, stock, price);
     product.addBatch(batch);
-    partner.addBatch(batch);  
+    partner.addBatch(batch);
   }
 
   /**
@@ -166,6 +166,7 @@ public class Warehouse implements Serializable {
     // Process operation
     double totalPrice = supplier.sellBatch(productId, amount);
     _acquisitionsBalance += totalPrice;
+    
     // Update inventory
     product.addBatch(new Batch(supplier, product, amount, price));
 

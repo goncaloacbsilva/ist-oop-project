@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ggc.core.StockEntity;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.UnknownObjectKeyException.ObjectType;
@@ -20,10 +21,7 @@ import ggc.core.product.comparators.OrderByLowerPriceFirst;
 import ggc.core.transaction.Transaction;
 
 /** Implements Partner class */
-public class Partner implements Serializable, Comparable<Partner> {
-
-    /** Serial number for serialization. */
-    private static final long serialVersionUID = 202109192006L;
+public class Partner extends StockEntity implements Comparable<Partner> {
 
     /** Partner Id */
     private String _id;
@@ -46,9 +44,6 @@ public class Partner implements Serializable, Comparable<Partner> {
     /** Partner Total Paid Sales */
     private double _paidSales;
 
-    /** Partner Batches */
-    private List<Batch> _batches;
-
     private Set<Transaction> _transactions;
 
     /** Partner Rank */
@@ -61,10 +56,10 @@ public class Partner implements Serializable, Comparable<Partner> {
      * @param address Partner address
      */
     public Partner(String id, String name, String address) {
+        super();
         _id = id;
         _name = name;
         _address = address;
-        _batches = new ArrayList<>();
         _transactions = new HashSet<>();
         _rank = new Normal();
     }
@@ -134,24 +129,6 @@ public class Partner implements Serializable, Comparable<Partner> {
     }
 
     /**
-     * Adds a new product batch to partner
-     * @param batch
-     */
-    public void addBatch(Batch batch) {
-        _batches.add(batch);
-    }
-
-    /**
-     * Get product batches
-     * @return list of the product batches
-     */
-    public List<Batch> getBatches() {
-        List<Batch> batches = new ArrayList<>(_batches);
-        Collections.sort(batches);
-        return batches;
-    }
-
-    /**
      * Check if the current rank is still valid (for the current points)
      * and updates partner rank according to his points
      */
@@ -191,38 +168,6 @@ public class Partner implements Serializable, Comparable<Partner> {
         _transactions.add(transaction);
     }
 
-
-    public int takeBatchAmount(Batch batch, int amount) {
-        int remain = amount - batch.getAmount();
-        if (remain > 0) {
-            _batches.remove(batch);
-        } else {
-            remain = 0;
-            batch.takeAmount(amount);
-        }
-        return remain;
-    }
-
-    public boolean hasAvailableStock(List<Batch> productBatches, int amount) {
-        int total = 0;
-        for (Batch batch : productBatches) {
-            total += batch.getAmount();
-            
-        }
-        return (total >= amount);
-    }
-
-    public List<Batch> getProductBatches(String productId) {
-        List<Batch> tempBatches;
-        tempBatches = new ArrayList<>();
-        for (Batch batch : _batches) {
-            if (batch.getProductId().equals(productId)) {
-                tempBatches.add(batch);
-            }
-        }
-        return tempBatches;
-    }
-
     /**
      * Sells a specific amount of partner product
      * @param productId
@@ -232,8 +177,9 @@ public class Partner implements Serializable, Comparable<Partner> {
      * @throws UnknownObjectKeyException
      */
     public double sellBatch(String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
-        List<Batch> tempBatches = getProductBatches(productId);
-        if (hasAvailableStock(tempBatches, amount)) {
+        if (hasAvailableStock(productId, amount)) {
+            List<Batch> tempBatches = getBatchesByProduct(productId);
+
             int remain = amount;
             double price = 0.0;
 
@@ -254,7 +200,8 @@ public class Partner implements Serializable, Comparable<Partner> {
             return price;
 
         } else {
-            throw new NotEnoughResourcesException(_id, amount, 1000);
+
+            throw new NotEnoughResourcesException(productId, amount, countStock(productId));
         }
     }
 
