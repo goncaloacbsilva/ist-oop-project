@@ -1,0 +1,24 @@
+*** tests/A-13-01-M-ok.out	2021-11-07 16:04:59.000000000 +0000
+--- tests/A-13-01-M-ok.outhyp	2021-11-11 16:13:48.000000000 +0000
+***************
+*** 13,19 ****
+  1 - Produtos com Preço Abaixo de Limite
+  2 - Facturas pagas por parceiro
+  0 - Sair
+! Escolha uma opção: Preço: Consultas
+  1 - Produtos com Preço Abaixo de Limite
+  2 - Facturas pagas por parceiro
+  0 - Sair
+--- 13,24 ----
+  1 - Produtos com Preço Abaixo de Limite
+  2 - Facturas pagas por parceiro
+  0 - Sair
+! Escolha uma opção: Consultas
+! 1 - Produtos com Preço Abaixo de Limite
+! 2 - Facturas pagas por parceiro
+! 0 - Sair
+! Escolha uma opção: Opção inválida!
+! Consultas
+  1 - Produtos com Preço Abaixo de Limite
+  2 - Facturas pagas por parceiro
+  0 - Sair

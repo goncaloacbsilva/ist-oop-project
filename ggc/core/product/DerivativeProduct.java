@@ -36,6 +36,11 @@ public class DerivativeProduct extends Product {
     }
 
     @Override
+    public double getAlpha() {
+        return _alpha;
+    }
+
+    @Override
     public boolean isSimple() {
         return false;
     }
@@ -46,10 +51,10 @@ public class DerivativeProduct extends Product {
      */
     @Override
     public String toString() {
-        String temp = super.toString() + "|" + _alpha + "|";
+        String temp = super.toString() + "|";
 
         for(RecipeComponent component : _recipe) {
-            temp += component.getProduct().getId() + ":" + component.getamount() + "#";
+            temp += component.getProduct().getId() + ":" + component.getAmount() + "#";
         }
 
         // Remove last "#" and return

@@ -14,10 +14,12 @@ import java.util.Iterator;
 import ggc.core.Date;
 import ggc.core.Parser;
 import ggc.core.product.Product;
+import ggc.core.product.RecipeComponent;
 import ggc.core.product.comparators.OrderByLowerPriceFirst;
 import ggc.core.transaction.Acquisition;
 import ggc.core.transaction.SaleByCredit;
 import ggc.core.transaction.Transaction;
+import ggc.core.transaction.Transaction.TransactionType;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
 import ggc.core.exception.BadEntryException;
@@ -44,11 +46,9 @@ public class Warehouse implements Serializable {
 
   private double _acquisitionsBalance;
 
-  private double _salesAccountingBalance;
-
   private double _salesBalance;
 
-  private Set<Transaction> _transactions;
+  private HashSet<Transaction> _transactions;
 
   /**
    * Creates a new Warehouse
@@ -140,7 +140,6 @@ public class Warehouse implements Serializable {
     Partner partner = getPartner(idPartner);
     Batch batch = new Batch(partner, product, stock, price);
     product.addBatch(batch);
-    partner.addBatch(batch);
   }
 
   /**
@@ -158,13 +157,35 @@ public class Warehouse implements Serializable {
     return batchList;
   }
 
-  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+  public List<Batch> getBatchesByPartner(String partnerId) throws UnknownObjectKeyException {
+    List<Batch> batchList = new ArrayList<>();
+
+    getPartner(partnerId);
+
+    for(Product product : _products) {
+      for(Batch batch : product.getBatchesByPartner(partnerId)) {
+        batchList.add(batch);
+      }
+    }
+    Collections.sort(batchList);
+    return batchList;
+  }
+
+  public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException {
+    
     // Get Transaction Entities info
     Partner supplier = getPartner(partnerId);
     Product product = getProduct(productId);
 
     // Process operation
-    double totalPrice = supplier.sellBatch(productId, amount);
+    double totalPrice = 0.0;
+
+    try {
+      totalPrice = supplier.sellBatch(productId, amount, price);
+    } catch (NotEnoughResourcesException exception) {
+      totalPrice = price * amount;
+      supplier.increasePurchases(totalPrice);
+    }
     _acquisitionsBalance += totalPrice;
     
     // Update inventory
@@ -177,22 +198,111 @@ public class Warehouse implements Serializable {
     supplier.addTransaction(acquisitionTransaction);
   }
 
+  public void checkDerivativeStock(Product product, int amount) throws NotEnoughResourcesException {
+    for (RecipeComponent component : product.getRecipe()) {
+      Product componentProduct = component.getProduct();
+      int amountNeeded = component.getAmount() * amount;
+      if (!componentProduct.hasAvailableStock(amountNeeded)) {
+        throw new NotEnoughResourcesException(componentProduct.getId(), amountNeeded, componentProduct.getTotalStock());
+      }
+    }
+  }
+
+  public double createProduct(Product product) throws NotEnoughResourcesException {
+    double balance = 0.0;
+    for (RecipeComponent component : product.getRecipe()) {
+      balance += component.getProduct().sellAmount(component.getAmount());
+    }
+    return balance;
+  }
+
   public void registerSaleByCredit(String partnerId, String productId, int paymentDeadline, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
     // Get Transaction Entities info
     Partner partner = getPartner(partnerId);
     Product product = getProduct(productId);
+
+    int remainingAmount = 0; // For derivative products
     
     // Check stocks
     if (!product.hasAvailableStock(amount)) {
-      throw new NotEnoughResourcesException(productId, amount, product.getTotalStock());
+      // Check if we can create more
+      if (!product.isSimple()) {
+        remainingAmount = amount - product.getTotalStock();
+        checkDerivativeStock(product, remainingAmount);
+      } else {
+        throw new NotEnoughResourcesException(productId, amount, product.getTotalStock());
+      }
+    }
+
+    // Process operation
+    try {
+      double unitPrice = product.getLowestPrice();
+      partner.addBatch(new Batch(partner, product, amount - remainingAmount, unitPrice));
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace();
+    }
+
+    // Agregate products (Derivative aditional stage)
+    if (remainingAmount > 0) {
+      double previousUnitPrice = 0.0;
+      double agregationCost = 1 + product.getAlpha();
+      int currentAmount = 0;
+      for (int i = 0; i < remainingAmount; i++) {
+        double currentUnitPrice = createProduct(product);
+        if (previousUnitPrice != 0.0) {
+          if (previousUnitPrice != currentUnitPrice) {
+            product.addBatch(new Batch(partner, product, currentAmount, previousUnitPrice * agregationCost));
+            currentAmount = 0;
+          }
+        }
+        previousUnitPrice = currentUnitPrice;
+        currentAmount++;
+      }
+      product.addBatch(new Batch(partner, product, currentAmount, previousUnitPrice * agregationCost));
     }
     
     // Update inventory
     double basePrice = product.sellAmount(amount);
 
+    // Register transaction
     Transaction saleTransaction = new SaleByCredit(_nextTransactionId++, product, amount, partner, basePrice, paymentDeadline);
+    
     _transactions.add(saleTransaction);
     partner.addTransaction(saleTransaction);
+  }
+
+  public List<Transaction> getTransactionsByPartner(String partnerId, TransactionType type) throws UnknownObjectKeyException {
+    List<Transaction> transactions = new ArrayList<>();
+    for (Transaction transaction : getPartner(partnerId).getTransactions()) {
+      if (transaction.getType() == type) {
+        transactions.add(transaction);
+      }
+    }
+    return transactions;
+  }
+
+  public List<Transaction> getTransactionsByType(TransactionType type) {
+    List<Transaction> transactions = new ArrayList<>();
+    for (Transaction transaction : _transactions) {
+      if (transaction.getType() == type) {
+        transactions.add(transaction);
+      }
+    }
+    return transactions;
+  }
+
+  public double getTransactionsHighestPrice(String productId) {
+    double price = 0.0;
+    for (Transaction transaction : _transactions) {
+      Product product = transaction.getProduct();
+      if (product.getId().equals(productId)) {
+        double transactionUnitPrice = transaction.getBasePrice() / transaction.getQuantity();
+        if (transactionUnitPrice > price) {
+          price = transactionUnitPrice;
+        }
+      }
+    }
+    return price;
   }
 
   public String viewTransaction(int transactionId) throws UnknownObjectKeyException {
@@ -202,6 +312,18 @@ public class Warehouse implements Serializable {
       }
     }
     throw new UnknownObjectKeyException(Integer.toString(transactionId), ObjectType.TRANSACTION);
+  }
+
+  public double getAccountingBalance() {
+    double balance = 0.0;
+    for (Transaction transaction : _transactions) {
+      balance += transaction.calculatePriceToPay();
+    }
+    return balance - _acquisitionsBalance;
+  }
+
+  public double getAvailableBalance() {
+    return _salesBalance - _acquisitionsBalance;
   }
 
   /**

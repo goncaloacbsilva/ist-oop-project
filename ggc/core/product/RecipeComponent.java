@@ -33,7 +33,7 @@ public class RecipeComponent {
      * Get product amount for the recipe
      * @return int amount
      */
-    public int getamount() {
+    public int getAmount() {
         return _amount;
     }
 

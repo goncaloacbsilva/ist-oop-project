@@ -36,6 +36,10 @@ public class Batch implements Serializable, Comparable<Batch> {
         _unitPrice = unitPrice;
     }
 
+    public Batch makeCopy() {
+        return new Batch(_supplier, _product, _amount, _unitPrice);
+    }
+
     /**
      * Get amount of product units
      * @return amount

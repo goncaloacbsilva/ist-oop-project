@@ -12,6 +12,8 @@ import ggc.core.Warehouse;
 import ggc.core.Date;
 import ggc.core.Parser;
 import ggc.core.product.Product;
+import ggc.core.transaction.Transaction;
+import ggc.core.transaction.Transaction.TransactionType;
 import ggc.core.product.Batch;
 import ggc.core.partner.Partner;
 
@@ -84,6 +86,10 @@ public class WarehouseManager {
     return _warehouse.getAvailableBatches();
   }
 
+  public List<Batch> getBatchesByPartner(String partnerId) throws UnknownObjectKeyException {
+    return _warehouse.getBatchesByPartner(partnerId);
+  }
+
 
   /**
    * Get a specific partner by its id
@@ -135,8 +141,20 @@ public class WarehouseManager {
     _warehouse.registerSaleByCredit(partnerId, productId, paymentDeadline, amount);
   }
 
+  public List<Transaction> getTransactionsByPartner(String partnerId, TransactionType type) throws UnknownObjectKeyException {
+    return _warehouse.getTransactionsByPartner(partnerId, type);
+  }
+
   public String viewTransaction(int transactionId) throws UnknownObjectKeyException {
     return _warehouse.viewTransaction(transactionId);
+  }
+
+  public double getAccountingBalance() {
+    return _warehouse.getAccountingBalance();
+  }
+
+  public double getAvailableBalance() {
+    return _warehouse.getAvailableBalance();
   }
 
   /**

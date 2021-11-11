@@ -94,7 +94,7 @@ public abstract class StockEntity implements Serializable {
 
     public int takeBatchAmount(Batch batch, int amount) {
         int remain = amount - batch.getAmount();
-        if (remain > 0) {
+        if (remain >= 0) {
             _batches.remove(batch);
         } else {
             remain = 0;
@@ -108,6 +108,17 @@ public abstract class StockEntity implements Serializable {
         tempBatches = new ArrayList<>();
         for (Batch batch : _batches) {
             if (batch.getProductId().equals(productId)) {
+                tempBatches.add(batch);
+            }
+        }
+        return tempBatches;
+    }
+
+    public List<Batch> getBatchesByPartner(String partnerId) {
+        List<Batch> tempBatches;
+        tempBatches = new ArrayList<>();
+        for (Batch batch : _batches) {
+            if (batch.getSupplierId().equals(partnerId)) {
                 tempBatches.add(batch);
             }
         }

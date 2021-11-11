@@ -20,6 +20,7 @@ public class SaleByCredit extends Sale {
         }
     }
 
+    @Override
     public double calculatePriceToPay() {
         Rank partnerRank = getPartner().getRank();
         int interval = _deadline - Date.now().getValue();
