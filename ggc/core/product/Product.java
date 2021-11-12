@@ -3,15 +3,23 @@ package ggc.core.product;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import ggc.core.notifications.Notification;
+import ggc.core.notifications.Subscriber;
+import ggc.core.StockEntity;
+import ggc.core.exception.NotEnoughResourcesException;
+import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.partner.Partner;
 import ggc.core.product.Batch;
+import ggc.core.product.comparators.OrderByLowerPriceFirst;
 
 /** Implements Product Base (abstract) class */
-public abstract class Product implements Serializable, Comparable<Product> {
-
-    /** Serial number for serialization. */
-    private static final long serialVersionUID = 202109192006L;
+public abstract class Product extends StockEntity implements Comparable<Product> {
 
     /** The maximum product price */
     private double _maxPrice;
@@ -22,17 +30,19 @@ public abstract class Product implements Serializable, Comparable<Product> {
     /** Product id */
     private String _id;
 
-    /** Product associated batches */
-    private List<Batch> _batches;
+    /** Partners list */
+    private List<Subscriber> _subscribers;
 
+    private boolean canCheckForNotifications;
 
     /**
      * Creates a new Product
      * @param id product id
      */
     public Product(String id) {
+        super();
         _id = id;
-        _batches = new ArrayList<>();
+        _subscribers = new ArrayList<>();
     }
 
     /**
@@ -59,6 +69,13 @@ public abstract class Product implements Serializable, Comparable<Product> {
         return _totalStock;
     }
 
+    public boolean isSimple() {
+        return true;
+    }
+
+    public List<RecipeComponent> getRecipe() {
+        return new ArrayList<>();
+    }
 
     /**
      * Displays Simple Product Information 
@@ -69,27 +86,87 @@ public abstract class Product implements Serializable, Comparable<Product> {
         return getId() + "|" + Math.round(getMaxPrice()) + "|" + getTotalStock();
     }
 
+    public void updateMaxPrice() {
+        double maxPrice = 0;
+        for (Batch batch : getBatches()) {
+            if (batch.getUnitPrice() > maxPrice) {
+                maxPrice = batch.getUnitPrice();
+            }
+        }
+        _maxPrice = maxPrice;
+    }
+
     /**
      * Adds a new product batch
      * @param batch
      */
+    @Override
     public void addBatch(Batch batch) {
-        _totalStock += batch.getamount();
+
+        checkForUpdates(batch.getUnitPrice());
+        
+        _totalStock += batch.getAmount();
         if (batch.getUnitPrice() > _maxPrice) {
             _maxPrice = batch.getUnitPrice();
         }
-        
-        _batches.add(batch);
+
+        super.addBatch(batch);
+
+        if (!canCheckForNotifications) {
+            canCheckForNotifications = true;
+        }
     }
-    
+
+    public void checkForUpdates(double price) {
+        if (canCheckForNotifications) {
+            if (getBatches().isEmpty()) {
+                notifySubscribers(new Notification(this, "NEW", price));
+            } else {
+                double lowestPriceBefore = getLowestPrice();
+                if (price < lowestPriceBefore) {
+                    notifySubscribers(new Notification(this, "BARGAIN", price));
+                }
+            }
+        }
+    }
+
+
+    public double getLowestPrice() throws IndexOutOfBoundsException {
+        return getBatches(new OrderByLowerPriceFirst()).get(0).getUnitPrice();
+    }
+
+
     /**
-     * Get product batches
-     * @return list of the product batches
+     * Sell a specific amount of this product, returns the price
+     * @param batch
      */
-    public List<Batch> getBatches() {
-        List<Batch> batches = new ArrayList<>(_batches);
-        Collections.sort(batches);
-        return batches;
+    public double sellAmount(int amount) throws NotEnoughResourcesException {
+        if (hasAvailableStock(amount)) {
+            int remain = amount;
+            _totalStock -= amount;
+            double price = 0.0;
+            Iterator<Batch> batchIterator = getBatches(new OrderByLowerPriceFirst()).iterator();
+
+            while (batchIterator.hasNext()) {
+                Batch batch = batchIterator.next();
+                double batchPrice = batch.getUnitPrice();
+                int previousRemain = remain;
+                remain = takeBatchAmount(batch, remain);
+                price += batchPrice * (previousRemain - remain);
+                if (remain == 0) {
+                    break;
+                }
+            }
+
+            return price;
+
+        } else {
+            throw new NotEnoughResourcesException(_id, amount, _totalStock);
+        }
+    }
+
+    public double getAlpha() {
+        return 0;
     }
     
     /* Override equals in order to compare Products by id */
@@ -117,4 +194,22 @@ public abstract class Product implements Serializable, Comparable<Product> {
     public int compareTo(Product product) {
         return _id.compareToIgnoreCase(product.getId());
     }
+
+    public boolean isSubscribed(Subscriber subscriber) {
+        return _subscribers.contains(subscriber);
+    }
+
+    public void subscribe(Subscriber subscriber) {
+        _subscribers.add(subscriber);
+    }
+
+    public void unsubscribe(Subscriber subscriber) {
+        _subscribers.remove(subscriber);
+    }
+
+    public void notifySubscribers(Notification n) {
+        for (Subscriber subscriber: _subscribers) {
+            subscriber.update(n);
+        }
+    } 
 }

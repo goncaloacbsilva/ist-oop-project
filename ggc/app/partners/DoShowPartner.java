@@ -22,7 +22,8 @@ class DoShowPartner extends Command<WarehouseManager> {
   public void execute() throws CommandException {
     String partnerId = stringField("partnerId");
     try {
-      _display.addLine(_receiver.getPartner(partnerId).toString());
+      _display.addLine(_receiver.getPartner(partnerId));
+      _display.addAll(_receiver.getPartner(partnerId).showNotifications());
       _display.display();
     } catch (UnknownObjectKeyException e) {
       throw new UnknownPartnerKeyException(e.getObjectKey());

@@ -33,7 +33,7 @@ public class Selection implements Rank, Serializable {
         }
 
         else {
-            return 0;
+            return 1.00;
         }
     }
 
@@ -63,7 +63,7 @@ public class Selection implements Rank, Serializable {
         }
 
         else {
-            return 0;
+            return 1.00;
         }
     }
 
@@ -76,7 +76,7 @@ public class Selection implements Rank, Serializable {
         if(period < -2) {
             return 0.10;
         } else {
-            return 1;
+            return 1.00;
         }
     }
 

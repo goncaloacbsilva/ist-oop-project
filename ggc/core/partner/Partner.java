@@ -2,18 +2,30 @@ package ggc.core.partner;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+
+import ggc.core.notifications.Notification;
+import ggc.core.StockEntity;
+import ggc.core.exception.NotEnoughResourcesException;
+import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.exception.UnknownObjectKeyException.ObjectType;
 import ggc.core.partner.rank.Normal;
 import ggc.core.partner.rank.Rank;
 import ggc.core.product.Batch;
+import ggc.core.product.comparators.OrderByLowerPriceFirst;
+import ggc.core.transaction.Transaction;
+import ggc.core.notifications.Subscriber;
+import ggc.app.exception.UnknownProductKeyException;
 
 /** Implements Partner class */
-public class Partner implements Serializable, Comparable<Partner> {
-
-    /** Serial number for serialization. */
-    private static final long serialVersionUID = 202109192006L;
+public class Partner extends StockEntity implements Subscriber, Comparable<Partner> {
 
     /** Partner Id */
     private String _id;
@@ -36,11 +48,13 @@ public class Partner implements Serializable, Comparable<Partner> {
     /** Partner Total Paid Sales */
     private double _paidSales;
 
-    /** Partner Batches */
-    private List<Batch> _batches;
+    private Set<Transaction> _transactions;
 
     /** Partner Rank */
     private Rank _rank;
+
+    /** Notifications List */
+    private List<Notification> _notifications;
 
     /**
      * Creates a new Partner
@@ -49,11 +63,13 @@ public class Partner implements Serializable, Comparable<Partner> {
      * @param address Partner address
      */
     public Partner(String id, String name, String address) {
+        super();
         _id = id;
         _name = name;
         _address = address;
-        _batches = new ArrayList<>();
+        _transactions = new HashSet<>();
         _rank = new Normal();
+        _notifications = new ArrayList<>();
     }
 
     /**
@@ -114,28 +130,21 @@ public class Partner implements Serializable, Comparable<Partner> {
 
     /**
      * Get partner rank name
-     * @return rank name
+     * @return rank
      */
-    public String getRank(){
-        return _rank.getRankName();
+    public Rank getRank() {
+        return _rank;
     }
 
-    /**
-     * Adds a new product batch to partner
-     * @param batch
-     */
-    public void addBatch(Batch batch) {
-        _batches.add(batch);
+
+    public List<Transaction> getTransactions() {
+        return new ArrayList<>(_transactions);
     }
 
-    /**
-     * Get product batches
-     * @return list of the product batches
-     */
-    public List<Batch> getBatches() {
-        List<Batch> batches = new ArrayList<>(_batches);
-        Collections.sort(batches);
-        return batches;
+    public List<Notification> showNotifications() {
+        List<Notification> tempNotifications = new ArrayList<>(_notifications);
+        _notifications.clear();
+        return tempNotifications;
     }
 
     /**
@@ -174,12 +183,62 @@ public class Partner implements Serializable, Comparable<Partner> {
         updateRank();
     }
 
+    public void increasePurchases(double price) {
+        _totalPurchases += price;
+    }
+
+    public void increaseSales(double price) {
+        _totalSales += price;
+    }
+
+    public void increasePaidSales(double price) {
+        _paidSales += price;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        _transactions.add(transaction);
+    }
+
+    /**
+     * Sells a specific amount of partner product
+     * @param productId
+     * @param amount
+     * @return total transaction price
+     * @throws NotEnoughResourcesException
+     * @throws UnknownObjectKeyException
+     */
+    public double sellBatch(String productId, int amount, double unitPrice) throws NotEnoughResourcesException, UnknownObjectKeyException {
+        if (hasAvailableStock(productId, amount)) {
+            List<Batch> tempBatches = getBatchesByProduct(productId);
+
+            double totalPrice = amount * unitPrice;
+            int remain = amount;
+
+            Collections.sort(tempBatches, new OrderByLowerPriceFirst());
+            Iterator<Batch> batchIterator = tempBatches.iterator();
+
+            while (batchIterator.hasNext()) {
+                Batch batch = batchIterator.next();
+                remain = takeBatchAmount(batch, remain);
+                if (remain == 0) {
+                    break;
+                }
+            }
+
+            _totalSales += totalPrice;
+            return totalPrice;
+
+        } else {
+            throw new NotEnoughResourcesException(productId, amount, countStock(productId));
+        }
+    }
+
     /**
      * Displays Partner Information
      * @return String (id|nome|endereço|estatuto|pontos|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas)
      */
     public String toString() {
-        return getId() + "|" + getName() + "|" + getAddress() + "|" + getRank() + "|" + 
+        return getId() + "|" + getName() + "|" + getAddress() + "|" + getRank().getRankName() + "|" + 
         getPoints() + "|" + Math.round(getTotalPurchases()) + "|" + Math.round(getTotalSales()) + "|" + Math.round(getPaidSales());
     }
 
@@ -206,6 +265,10 @@ public class Partner implements Serializable, Comparable<Partner> {
     /* Implements Comparable interface method for sorting purposes */
     public int compareTo(Partner partner) {
         return _id.compareToIgnoreCase(partner.getId());
+    }
+
+    public void update(Notification n) {
+        _notifications.add(n);
     }
     
 }

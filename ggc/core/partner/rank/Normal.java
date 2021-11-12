@@ -12,28 +12,11 @@ public class Normal implements Rank, Serializable {
     public double getDiscount(int period, int N) {
         if (period >= N){
             return 0.90;
-        }
-
-        else if (N > period && period >= 0) {
+        } else {
             return 1.00;
-        }
-
-        else if (0 < Math.abs(period) && Math.abs(period) <= N) {
-            return 1.00;
-
-        }
-
-        else if (Math.abs(period) > N ) {
-            return 1.00;
-        }
-
-        else {
-            return 0;
         }
         
     }
-    
-
     
     public double getPenalty(int period, int N){
         if (period >= N){
@@ -55,7 +38,7 @@ public class Normal implements Rank, Serializable {
         }
 
         else {
-            return 0;
+            return 1.00;
         }
         
     }

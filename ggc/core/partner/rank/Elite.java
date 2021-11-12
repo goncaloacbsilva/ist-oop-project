@@ -26,7 +26,7 @@ public class Elite implements Rank, Serializable {
         }
 
         else {
-            return 1;
+            return 1.00;
         }
         
     }
@@ -43,7 +43,7 @@ public class Elite implements Rank, Serializable {
         if(period < -15) {
             return 0.25;
         } else {
-            return 1;
+            return 1.00;
         }
     }
 
