@@ -12,12 +12,13 @@ public class DoLookupProductBatchesUnderGivenPrice extends Command<WarehouseMana
 
   public DoLookupProductBatchesUnderGivenPrice(WarehouseManager receiver) {
     super(Label.PRODUCTS_UNDER_PRICE, receiver);
-    //FIXME add command fields
+    addRealField("priceLimit", Message.requestPriceLimit());
   }
 
   @Override
   public void execute() throws CommandException {
-    //FIXME implement command
+    _display.addAll(_receiver.lookupProductsUnderTopPrice(realField("priceLimit")));
+    _display.display();
   }
 
 }

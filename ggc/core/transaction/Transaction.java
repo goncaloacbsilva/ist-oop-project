@@ -45,6 +45,10 @@ public abstract class Transaction implements Serializable {
         return _paid;
     } 
 
+    public void pay() {
+        _paid = true;
+    }
+
     public Partner getPartner() {
         return _partner;
     }
@@ -59,6 +63,10 @@ public abstract class Transaction implements Serializable {
 
     public int getPaymentDate() {
         return _paymentDate;
+    }
+
+    public void setPaymentDate(int value) {
+        _paymentDate = value;
     }
 
     public abstract double getBasePrice();

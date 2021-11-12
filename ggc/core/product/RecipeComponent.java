@@ -3,7 +3,7 @@ package ggc.core.product;
 import ggc.core.product.Product;
 
 /** Implements Recipe Component class */
-public class RecipeComponent {
+public class RecipeComponent implements Comparable<RecipeComponent> {
 
     /** Product associated to the recipe component */
     private Product _product;
@@ -35,6 +35,10 @@ public class RecipeComponent {
      */
     public int getAmount() {
         return _amount;
+    }
+
+    public int compareTo(RecipeComponent a) {
+        return _product.getId().compareToIgnoreCase(a.getProduct().getId());
     }
 
 }

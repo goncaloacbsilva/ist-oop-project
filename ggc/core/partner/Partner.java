@@ -173,6 +173,14 @@ public class Partner extends StockEntity implements Comparable<Partner> {
         _totalPurchases += price;
     }
 
+    public void increaseSales(double price) {
+        _totalSales += price;
+    }
+
+    public void increasePaidSales(double price) {
+        _paidSales += price;
+    }
+
     public void addTransaction(Transaction transaction) {
         _transactions.add(transaction);
     }

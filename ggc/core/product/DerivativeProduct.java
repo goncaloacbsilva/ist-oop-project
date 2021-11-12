@@ -1,7 +1,7 @@
 package ggc.core.product;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import ggc.core.product.Product;
 import ggc.core.product.RecipeComponent;
@@ -10,7 +10,7 @@ import ggc.core.product.RecipeComponent;
 public class DerivativeProduct extends Product {
 
     /** Derivative Product Recipe */
-    private Set<RecipeComponent> _recipe;
+    private List<RecipeComponent> _recipe;
 
     /** Alpha Product value */
     private double _alpha;
@@ -21,9 +21,9 @@ public class DerivativeProduct extends Product {
      * @param recipe recipe
      * @param alpha Alpha factor
      */
-    public DerivativeProduct(String id, Set<RecipeComponent> recipe, double alpha) {
+    public DerivativeProduct(String id, List<RecipeComponent> recipe, double alpha) {
         super(id);
-        _recipe = new HashSet<RecipeComponent>(recipe);
+        _recipe = new ArrayList<>(recipe);
         _alpha = alpha;
     }
 
@@ -31,7 +31,7 @@ public class DerivativeProduct extends Product {
      * Get Product recipe
      * @return RecipeComponent set
      */
-    public Set<RecipeComponent> getRecipe() {
+    public List<RecipeComponent> getRecipe() {
         return _recipe;
     }
 

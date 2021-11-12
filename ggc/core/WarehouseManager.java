@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ggc.core.Warehouse;
@@ -22,6 +24,10 @@ import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDateValueException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.lookups.BatchesWithPriceLowerThan;
+import ggc.core.lookups.Lookup;
+import ggc.core.lookups.LookupStrategy;
+import ggc.core.lookups.TransactionsPaidByPartner;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.NotEnoughResourcesException;
 
@@ -32,7 +38,33 @@ public class WarehouseManager {
   private String _filename = "";
 
   /** The wharehouse itself. */
-  private Warehouse _warehouse = new Warehouse();
+  private Warehouse _warehouse;
+
+  private Lookup _lookupModule;
+
+  public WarehouseManager() {
+    _warehouse = new Warehouse();
+    _lookupModule = new Lookup(_warehouse);
+  }
+
+  public Collection<Object> lookupOperation(LookupStrategy strategy) throws UnknownObjectKeyException {
+    _lookupModule.setStrategy(strategy);
+    return _lookupModule.execute();
+  }
+
+  public Collection<Object> lookupProductsUnderTopPrice(double price) {
+    Collection<Object> results = new ArrayList<>();
+    try {
+      results = lookupOperation(new BatchesWithPriceLowerThan(price));
+    } catch (UnknownObjectKeyException ignored) {
+      // This will never happen
+    }
+    return results;
+  }
+
+  public Collection<Object> lookupPaymentsByPartner(String partnerId) throws UnknownObjectKeyException {
+    return lookupOperation(new TransactionsPaidByPartner(partnerId));
+  }
 
   /**
    * Get the current date object
@@ -141,12 +173,20 @@ public class WarehouseManager {
     _warehouse.registerSaleByCredit(partnerId, productId, paymentDeadline, amount);
   }
 
+  public void registerBreakdown(String partnerId, String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+    _warehouse.registerBreakdown(partnerId, productId, amount);
+  }
+
   public List<Transaction> getTransactionsByPartner(String partnerId, TransactionType type) throws UnknownObjectKeyException {
     return _warehouse.getTransactionsByPartner(partnerId, type);
   }
 
   public String viewTransaction(int transactionId) throws UnknownObjectKeyException {
-    return _warehouse.viewTransaction(transactionId);
+    return _warehouse.getTransaction(transactionId).toString();
+  }
+
+  public void registerPartnerPayment(int transactionId) throws UnknownObjectKeyException {
+    _warehouse.registerPartnerPayment(transactionId);
   }
 
   public double getAccountingBalance() {
@@ -208,6 +248,7 @@ public class WarehouseManager {
       ObjectInputStream inStream = new ObjectInputStream(inFile)
     ) {
       _warehouse = (Warehouse) inStream.readObject();
+      _lookupModule = new Lookup(_warehouse);
       try {
         Date.set((int) inStream.readObject());
       } catch (InvalidDateValueException ignored) {

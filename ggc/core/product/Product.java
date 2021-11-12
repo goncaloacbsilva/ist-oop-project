@@ -63,8 +63,8 @@ public abstract class Product extends StockEntity implements Comparable<Product>
         return true;
     }
 
-    public Set<RecipeComponent> getRecipe() {
-        return new HashSet<>();
+    public List<RecipeComponent> getRecipe() {
+        return new ArrayList<>();
     }
 
     /**
