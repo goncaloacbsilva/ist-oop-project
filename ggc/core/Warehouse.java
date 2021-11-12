@@ -24,6 +24,8 @@ import ggc.core.exception.BadEntryException;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.UnknownObjectKeyException.ObjectType;
+import ggc.app.exception.UnknownPartnerKeyException;
+import ggc.app.exception.UnknownProductKeyException;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -212,6 +214,10 @@ public class Warehouse implements Serializable {
   void importFile(String txtfile) throws IOException, BadEntryException, UnknownObjectKeyException {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
+  }
+
+  public boolean toggleNotificationStatus(String partnerId, String productId) throws UnknownPartnerKeyException, UnknownProductKeyException {
+    //return getPartner(partnerId).toggleNotificationStatus(productId);
   }
 
 }

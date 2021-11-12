@@ -22,6 +22,8 @@ import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.NotEnoughResourcesException;
+import ggc.app.exception.UnknownPartnerKeyException;
+import ggc.app.exception.UnknownProductKeyException;
 
 /** Façade for access. */
 public class WarehouseManager {
@@ -216,6 +218,10 @@ public class WarehouseManager {
     } catch (IOException | BadEntryException | UnknownObjectKeyException e) {
       throw new ImportFileException(textfile, e);
     }
+  }
+
+  public boolean toggleNotificationStatus(String partnerId, String productId) throws UnknownPartnerKeyException, UnknownProductKeyException {
+    return _warehouse.toggleNotificationStatus(partnerId, productId);
   }
 
 }

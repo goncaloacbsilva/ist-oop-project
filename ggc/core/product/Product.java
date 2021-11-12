@@ -7,8 +7,11 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import ggc.core.notifications.Notification;
+import ggc.core.notifications.Subscriber;
 import ggc.core.StockEntity;
 import ggc.core.exception.NotEnoughResourcesException;
+import ggc.core.partner.Partner;
 import ggc.core.product.Batch;
 import ggc.core.product.comparators.OrderByLowerPriceFirst;
 
@@ -24,6 +27,9 @@ public abstract class Product extends StockEntity implements Comparable<Product>
     /** Product id */
     private String _id;
 
+    /** Partners list */
+    private List<Subscriber> _subscribers;
+
     /**
      * Creates a new Product
      * @param id product id
@@ -31,6 +37,7 @@ public abstract class Product extends StockEntity implements Comparable<Product>
     public Product(String id) {
         super();
         _id = id;
+        _subscribers = new ArrayList<>();
     }
 
     /**
@@ -149,4 +156,18 @@ public abstract class Product extends StockEntity implements Comparable<Product>
     public int compareTo(Product product) {
         return _id.compareToIgnoreCase(product.getId());
     }
+
+    public void subscribe(Subscriber subscriber) {
+        _subscribers.add(subscriber);
+    }
+
+    public void unsubscribe(Subscriber subscriber) {
+        _subscribers.remove(subscriber);
+    }
+
+    public void notifySubscribers(Notification n) {
+        for (Subscriber subscriber: _subscribers) {
+            subscriber.update(n);
+        }
+    } 
 }
