@@ -4,7 +4,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
-import ggc.core.product.Batch;
+import ggc.core.Batch;
 import ggc.core.exception.UnknownObjectKeyException;
 
 /**

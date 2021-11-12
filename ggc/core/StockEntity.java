@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ggc.core.product.Batch;
+import ggc.core.Batch;
 
 public abstract class StockEntity implements Serializable {
 

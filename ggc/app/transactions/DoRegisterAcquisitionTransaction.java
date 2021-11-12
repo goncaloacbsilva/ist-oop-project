@@ -12,10 +12,10 @@ import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.product.DerivativeProduct;
-import ggc.core.product.Product;
-import ggc.core.product.RecipeComponent;
-import ggc.core.product.SimpleProduct;
+import ggc.core.DerivativeProduct;
+import ggc.core.Product;
+import ggc.core.RecipeComponent;
+import ggc.core.SimpleProduct;
 import pt.tecnico.uilib.forms.Form;
 
 /**

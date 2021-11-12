@@ -3,7 +3,7 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
-import ggc.core.product.Batch;
+import ggc.core.Batch;
 
 /**
  * Show available batches.

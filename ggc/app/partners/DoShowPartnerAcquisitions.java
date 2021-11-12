@@ -5,7 +5,7 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.transaction.Transaction.TransactionType;
+import ggc.core.Transaction.TransactionType;
 
 /**
  * Show all transactions for a specific partner.

@@ -2,9 +2,8 @@ package ggc.app.partners;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-
+import ggc.core.Partner;
 import ggc.core.WarehouseManager;
-import ggc.core.partner.Partner;
 
 /**
  * Show all partners.

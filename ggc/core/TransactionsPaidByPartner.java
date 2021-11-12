@@ -1,0 +1,25 @@
+package ggc.core;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import ggc.core.exception.UnknownObjectKeyException;
+import ggc.core.Transaction.TransactionType;
+
+public class TransactionsPaidByPartner implements LookupStrategy {
+    private String _partnerId;
+
+    public TransactionsPaidByPartner(String partnerId) {
+        _partnerId = partnerId;
+    }
+
+    public Collection<Object> execute(Warehouse store) throws UnknownObjectKeyException {
+        Collection<Object> objects = new ArrayList<>();
+        for (Transaction transaction : store.getPartner(_partnerId).getTransactions()) {
+            if (transaction.getType() == TransactionType.SALE && transaction.isPaid()) {
+                objects.add(transaction);
+            }
+        }
+        return objects;
+    }
+}

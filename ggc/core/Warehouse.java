@@ -13,12 +13,11 @@ import java.util.HashSet;
 
 import ggc.core.Date;
 import ggc.core.Parser;
-import ggc.core.product.Product;
-import ggc.core.product.RecipeComponent;
-import ggc.core.transaction.Transaction;
-import ggc.core.transaction.Transaction.TransactionType;
-import ggc.core.product.Batch;
-import ggc.core.partner.Partner;
+import ggc.core.Product;
+import ggc.core.RecipeComponent;
+import ggc.core.Transaction;
+import ggc.core.Transaction.TransactionType;
+import ggc.core.Batch;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
@@ -83,12 +82,11 @@ public class Warehouse implements Serializable {
    * @throws UnknownObjectKeyException
    */
   public Product getProduct(String id) throws UnknownObjectKeyException {
-    for (Product product : getProducts()) {
-      if (product.getId().equalsIgnoreCase(id)) {
-        return product;
-      }
+    if (_products.containsKey(id.toLowerCase())) {
+      return _products.get(id.toLowerCase());
+    } else {
+      throw new UnknownObjectKeyException(id, ObjectType.PRODUCT);
     }
-    throw new UnknownObjectKeyException(id, ObjectType.PRODUCT);
   }
 
   /**
@@ -98,12 +96,11 @@ public class Warehouse implements Serializable {
    * @throws UnknownObjectKeyException
    */
   public Partner getPartner(String id) throws UnknownObjectKeyException {
-    for (Partner partner : getPartners()) {
-      if (partner.getId().equalsIgnoreCase(id)) {
-        return partner;
-      }
+    if (_partners.containsKey(id.toLowerCase())) {
+      return _partners.get(id.toLowerCase());
+    } else {
+      throw new UnknownObjectKeyException(id, ObjectType.PARTNER);
     }
-    throw new UnknownObjectKeyException(id, ObjectType.PARTNER);
   }
 
   /**
@@ -112,10 +109,10 @@ public class Warehouse implements Serializable {
    * @return if the operation was successful or not
    */
   public boolean addPartner(Partner partner){
-    if (_partners.containsKey(partner.getId())) {
+    if (_partners.containsKey(partner.getId().toLowerCase())) {
       return false;
     } else {
-      _partners.put(partner.getId(), partner);
+      _partners.put(partner.getId().toLowerCase(), partner);
       return true;
     }
   }
@@ -130,10 +127,10 @@ public class Warehouse implements Serializable {
       product.subscribe(partner);
     }
 
-    if (_products.containsKey(product.getId())) {
+    if (_products.containsKey(product.getId().toLowerCase())) {
       return false;
     } else {
-      _products.put(product.getId(), product);
+      _products.put(product.getId().toLowerCase(), product);
       return true;
     }
   }
