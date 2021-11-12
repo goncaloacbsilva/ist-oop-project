@@ -4,6 +4,8 @@
 
 ## Created with 🍺🍺 and some ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 
+## `1441 lines of code in 4 days ✅`
+
 ## Authors
 This project was made by:
 - (96925) Gonçalo Abreu Corrêa Brito da Silva
