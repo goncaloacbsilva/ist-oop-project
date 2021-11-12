@@ -4,14 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
-import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.exception.UnknownObjectKeyException.ObjectType;
-import ggc.core.partner.Partner;
 import ggc.core.product.Batch;
-import ggc.core.product.Product;
 
 public abstract class StockEntity implements Serializable {
 

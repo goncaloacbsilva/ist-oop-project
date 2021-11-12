@@ -2,12 +2,9 @@ package ggc.core.lookups;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import ggc.core.Warehouse;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.product.Batch;
-import ggc.core.product.Product;
 import ggc.core.transaction.Transaction;
 import ggc.core.transaction.Transaction.TransactionType;
 

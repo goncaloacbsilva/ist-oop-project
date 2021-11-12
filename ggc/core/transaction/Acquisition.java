@@ -1,6 +1,5 @@
 package ggc.core.transaction;
 
-import ggc.core.Date;
 import ggc.core.partner.Partner;
 import ggc.core.product.Product;
 import ggc.core.transaction.Transaction;

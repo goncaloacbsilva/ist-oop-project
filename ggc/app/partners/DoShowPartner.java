@@ -2,11 +2,11 @@ package ggc.app.partners;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
 import ggc.core.WarehouseManager;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.app.exception.UnknownPartnerKeyException;
 
-//FIXME import classes
+import ggc.app.exception.UnknownPartnerKeyException;
 
 /**
  * Show partner.

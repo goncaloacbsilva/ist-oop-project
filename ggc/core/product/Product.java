@@ -1,20 +1,13 @@
 package ggc.core.product;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import ggc.core.notifications.Notification;
 import ggc.core.notifications.Subscriber;
 import ggc.core.StockEntity;
 import ggc.core.exception.NotEnoughResourcesException;
-import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.partner.Partner;
 import ggc.core.product.Batch;
 import ggc.core.product.comparators.OrderByLowerPriceFirst;
 

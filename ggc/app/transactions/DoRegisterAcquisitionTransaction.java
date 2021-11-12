@@ -4,9 +4,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ggc.app.exception.UnavailableProductException;
 import ggc.app.exception.UnknownPartnerKeyException;

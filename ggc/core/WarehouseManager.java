@@ -14,6 +14,10 @@ import ggc.core.Warehouse;
 import ggc.core.Date;
 import ggc.core.Parser;
 import ggc.core.product.Product;
+import ggc.core.stock_operations.AcquisitionOperation;
+import ggc.core.stock_operations.BreakdownOperation;
+import ggc.core.stock_operations.SaleOperation;
+import ggc.core.stock_operations.StockOperation;
 import ggc.core.transaction.Transaction;
 import ggc.core.transaction.Transaction.TransactionType;
 import ggc.core.product.Batch;
@@ -30,8 +34,6 @@ import ggc.core.lookups.LookupStrategy;
 import ggc.core.lookups.TransactionsPaidByPartner;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.NotEnoughResourcesException;
-import ggc.app.exception.UnknownPartnerKeyException;
-import ggc.app.exception.UnknownProductKeyException;
 
 /** Façade for access. */
 public class WarehouseManager {
@@ -168,15 +170,18 @@ public class WarehouseManager {
   }
   
   public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException, NotEnoughResourcesException {
-    _warehouse.registerAcquisition(partnerId, productId, price, amount);
+    StockOperation operation = new AcquisitionOperation(_warehouse, price);
+    operation.execute(partnerId, productId, amount);
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int paymentDeadline, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
-    _warehouse.registerSaleByCredit(partnerId, productId, paymentDeadline, amount);
+    StockOperation operation = new SaleOperation(_warehouse, paymentDeadline);
+    operation.execute(partnerId, productId, amount);
   }
 
   public void registerBreakdown(String partnerId, String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
-    _warehouse.registerBreakdown(partnerId, productId, amount);
+    StockOperation operation = new BreakdownOperation(_warehouse);
+    operation.execute(partnerId, productId, amount);
   }
 
   public List<Transaction> getTransactionsByPartner(String partnerId, TransactionType type) throws UnknownObjectKeyException {

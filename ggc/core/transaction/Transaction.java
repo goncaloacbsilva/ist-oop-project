@@ -45,8 +45,9 @@ public abstract class Transaction implements Serializable {
         return _paid;
     } 
 
-    public void pay() {
+    public double pay() {
         _paid = true;
+        return 0.0;
     }
 
     public Partner getPartner() {

@@ -6,7 +6,6 @@ import ggc.core.exception.InvalidDateValueException;
  * Implements Date object
  */
 public class Date {
-    private static final long serialVersionUID = 202109192006L;
 
     /** Global value shared by all Date instances */
     private static int _globalValue;

@@ -1,28 +1,25 @@
 package ggc.core.partner;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 
-import ggc.core.notifications.Notification;
-import ggc.core.StockEntity;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.exception.UnknownObjectKeyException.ObjectType;
+
+import ggc.core.StockEntity;
+import ggc.core.notifications.Notification;
+import ggc.core.notifications.NotificationStrategy;
+import ggc.core.notifications.Subscriber;
 import ggc.core.partner.rank.Normal;
 import ggc.core.partner.rank.Rank;
 import ggc.core.product.Batch;
 import ggc.core.product.comparators.OrderByLowerPriceFirst;
 import ggc.core.transaction.Transaction;
-import ggc.core.notifications.Subscriber;
-import ggc.app.exception.UnknownProductKeyException;
 
 /** Implements Partner class */
 public class Partner extends StockEntity implements Subscriber, Comparable<Partner> {
@@ -52,6 +49,8 @@ public class Partner extends StockEntity implements Subscriber, Comparable<Partn
 
     /** Partner Rank */
     private Rank _rank;
+
+    private NotificationStrategy _notifyStrategy;
 
     /** Notifications List */
     private List<Notification> _notifications;
@@ -267,8 +266,15 @@ public class Partner extends StockEntity implements Subscriber, Comparable<Partn
         return _id.compareToIgnoreCase(partner.getId());
     }
 
-    public void update(Notification n) {
-        _notifications.add(n);
+    public void setNotifyStrategy(NotificationStrategy strategy) {
+        _notifyStrategy = strategy;
+    }
+
+    public void update(Notification notification) {
+        if (_notifyStrategy != null) {
+            _notifyStrategy.deliver(notification);
+        }
+        _notifications.add(notification);
     }
     
 }

@@ -49,7 +49,7 @@ public class Elite implements Rank, Serializable {
 
     public void updateRank(Partner partner, int points) {
         if (points <= 25000) {
-            partner.setRank(new Elite());
+            partner.setRank(new Selection());
         }
     }
 }

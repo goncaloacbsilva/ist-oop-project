@@ -2,7 +2,6 @@ package ggc.core.transaction;
 
 import ggc.core.Date;
 import ggc.core.partner.Partner;
-import ggc.core.partner.rank.Rank;
 import ggc.core.product.Product;
 import ggc.core.transaction.Sale;
 
@@ -26,13 +25,14 @@ public class BreakdownSale extends Sale {
     }
 
     @Override
-    public void pay() {
+    public double pay() {
         if (!isPaid()) {
             Partner partner = getPartner();
             setPaymentDate(Date.now().getValue());
             partner.addPoints(calculatePriceToPay());
             super.pay();
         }
+        return 0.0;
     }
 
     @Override
