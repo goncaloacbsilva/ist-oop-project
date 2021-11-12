@@ -25,19 +25,6 @@ public abstract class StockEntity implements Serializable {
     }
 
     /**
-     * Create a new Batch
-     * @param idPartner
-     * @param idProduct
-     * @param stock
-     * @param price
-     * @throws UnknownObjectKeyException
-     */
-    public void addBatch(Partner partner, Product product, int stock, double price) throws UnknownObjectKeyException {
-        Batch batch = new Batch(partner, product, stock, price);
-        _batches.add(batch);
-    }
-
-    /**
      * Adds a new product batch
      * @param batch
      */

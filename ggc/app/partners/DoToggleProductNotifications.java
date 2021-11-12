@@ -6,10 +6,7 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownProductKeyException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
-
-
-
-//FIXME import classes
+import ggc.core.exception.UnknownObjectKeyException;
 
 /**
  * Toggle product-related notifications.
@@ -28,12 +25,16 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
     String productId = stringField("productId");
 
     try {
-      if (_receiver.toggleNotificationStatus(partnerId, productId)) {
+      _receiver.toggleNotificationStatus(partnerId, productId);
+    } catch (UnknownObjectKeyException exception) {
+      switch(exception.getType()) {
+        case PARTNER:
+          throw new UnknownPartnerKeyException(exception.getObjectKey());
+        case PRODUCT:
+          throw new UnknownProductKeyException(exception.getObjectKey());
+        default:
+          exception.printStackTrace();
       }
-    } catch (UnknownPartnerKeyException e) {
-      throw new UnknownPartnerKeyException(partnerId);
-    } catch (UnknownProductKeyException e) {
-      throw new UnknownProductKeyException(productId);
     }
   }
   

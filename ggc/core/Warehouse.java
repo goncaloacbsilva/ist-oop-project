@@ -127,6 +127,9 @@ public class Warehouse implements Serializable {
    * @return if the operation was successful or not
    */
   public boolean addProduct(Product product) {
+    for (Partner partner : _partners) {
+      product.subscribe(partner);
+    }
     return _products.add(product);
   }
 
@@ -395,8 +398,14 @@ public class Warehouse implements Serializable {
     parser.parseFile(txtfile);
   }
 
-  public boolean toggleNotificationStatus(String partnerId, String productId) throws UnknownPartnerKeyException, UnknownProductKeyException {
-    //return getPartner(partnerId).toggleNotificationStatus(productId);
+  public void toggleNotificationStatus(String partnerId, String productId) throws UnknownObjectKeyException {
+    Partner partner = getPartner(partnerId);
+    Product product = getProduct(productId);
+    if (product.isSubscribed(partner)) {
+      product.unsubscribe(partner);
+    } else {
+      product.subscribe(partner);
+    }
   }
 
 }

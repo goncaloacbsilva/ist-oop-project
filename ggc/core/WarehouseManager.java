@@ -279,8 +279,8 @@ public class WarehouseManager {
     }
   }
 
-  public boolean toggleNotificationStatus(String partnerId, String productId) throws UnknownPartnerKeyException, UnknownProductKeyException {
-    return _warehouse.toggleNotificationStatus(partnerId, productId);
+  public void toggleNotificationStatus(String partnerId, String productId) throws UnknownObjectKeyException {
+    _warehouse.toggleNotificationStatus(partnerId, productId);
   }
 
 }

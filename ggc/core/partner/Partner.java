@@ -25,7 +25,7 @@ import ggc.core.notifications.Subscriber;
 import ggc.app.exception.UnknownProductKeyException;
 
 /** Implements Partner class */
-public class Partner extends StockEntity implements Comparable<Partner> {
+public class Partner extends StockEntity implements Subscriber, Comparable<Partner> {
 
     /** Partner Id */
     private String _id;
@@ -139,6 +139,12 @@ public class Partner extends StockEntity implements Comparable<Partner> {
 
     public List<Transaction> getTransactions() {
         return new ArrayList<>(_transactions);
+    }
+
+    public List<Notification> showNotifications() {
+        List<Notification> tempNotifications = new ArrayList<>(_notifications);
+        _notifications.clear();
+        return tempNotifications;
     }
 
     /**

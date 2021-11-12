@@ -13,6 +13,7 @@ import ggc.core.notifications.Notification;
 import ggc.core.notifications.Subscriber;
 import ggc.core.StockEntity;
 import ggc.core.exception.NotEnoughResourcesException;
+import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.partner.Partner;
 import ggc.core.product.Batch;
 import ggc.core.product.comparators.OrderByLowerPriceFirst;
@@ -31,6 +32,8 @@ public abstract class Product extends StockEntity implements Comparable<Product>
 
     /** Partners list */
     private List<Subscriber> _subscribers;
+
+    private boolean canCheckForNotifications;
 
     /**
      * Creates a new Product
@@ -99,12 +102,32 @@ public abstract class Product extends StockEntity implements Comparable<Product>
      */
     @Override
     public void addBatch(Batch batch) {
+
+        checkForUpdates(batch.getUnitPrice());
+        
         _totalStock += batch.getAmount();
         if (batch.getUnitPrice() > _maxPrice) {
             _maxPrice = batch.getUnitPrice();
         }
-        
+
         super.addBatch(batch);
+
+        if (!canCheckForNotifications) {
+            canCheckForNotifications = true;
+        }
+    }
+
+    public void checkForUpdates(double price) {
+        if (canCheckForNotifications) {
+            if (getBatches().isEmpty()) {
+                notifySubscribers(new Notification(this, "NEW", price));
+            } else {
+                double lowestPriceBefore = getLowestPrice();
+                if (price < lowestPriceBefore) {
+                    notifySubscribers(new Notification(this, "BARGAIN", price));
+                }
+            }
+        }
     }
 
 
@@ -170,6 +193,10 @@ public abstract class Product extends StockEntity implements Comparable<Product>
     /* Implements Comparable interface method for sorting purposes */
     public int compareTo(Product product) {
         return _id.compareToIgnoreCase(product.getId());
+    }
+
+    public boolean isSubscribed(Subscriber subscriber) {
+        return _subscribers.contains(subscriber);
     }
 
     public void subscribe(Subscriber subscriber) {
