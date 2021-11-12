@@ -6,39 +6,73 @@ import ggc.core.partner.Partner;
 import ggc.core.product.Product;
 
 public abstract class Transaction implements Serializable {
+
+    public enum TransactionType {
+        ACQUISITION,
+        SALE
+    };
+
     private int _id;
     private int _quantity;
     private Product _product;
     private Partner _partner;
     private boolean _paid;
     private int _paymentDate;
+    private TransactionType _type;
     
 
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
 
-    public Transaction(int id, Product product, int quantity, Partner partner, int paymentDate) {
+    public Transaction(int id, Product product, int quantity, Partner partner, int paymentDate, TransactionType type) {
         _id = id;
         _product = product;
         _quantity = quantity;
         _partner = partner;
         _paymentDate = paymentDate;
+        _type = type;
     }
 
     public int getId() {
         return _id;
     }
 
+    public TransactionType getType() {
+        return _type;
+    }
+
     public boolean isPaid() {
         return _paid;
     } 
+
+    public void pay() {
+        _paid = true;
+    }
 
     public Partner getPartner() {
         return _partner;
     }
 
+    public Product getProduct() {
+        return _product;
+    }
+
+    public int getQuantity() {
+        return _quantity;
+    }
+
     public int getPaymentDate() {
         return _paymentDate;
+    }
+
+    public void setPaymentDate(int value) {
+        _paymentDate = value;
+    }
+
+    public abstract double getBasePrice();
+
+    public double calculatePriceToPay() {
+        return 0.0;
     }
 
     @Override

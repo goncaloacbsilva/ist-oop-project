@@ -136,6 +136,11 @@ public class Partner extends StockEntity implements Comparable<Partner> {
         return _rank;
     }
 
+
+    public List<Transaction> getTransactions() {
+        return new ArrayList<>(_transactions);
+    }
+
     /**
      * Check if the current rank is still valid (for the current points)
      * and updates partner rank according to his points
@@ -172,6 +177,18 @@ public class Partner extends StockEntity implements Comparable<Partner> {
         updateRank();
     }
 
+    public void increasePurchases(double price) {
+        _totalPurchases += price;
+    }
+
+    public void increaseSales(double price) {
+        _totalSales += price;
+    }
+
+    public void increasePaidSales(double price) {
+        _paidSales += price;
+    }
+
     public void addTransaction(Transaction transaction) {
         _transactions.add(transaction);
     }
@@ -184,31 +201,28 @@ public class Partner extends StockEntity implements Comparable<Partner> {
      * @throws NotEnoughResourcesException
      * @throws UnknownObjectKeyException
      */
-    public double sellBatch(String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
+    public double sellBatch(String productId, int amount, double unitPrice) throws NotEnoughResourcesException, UnknownObjectKeyException {
         if (hasAvailableStock(productId, amount)) {
             List<Batch> tempBatches = getBatchesByProduct(productId);
 
+            double totalPrice = amount * unitPrice;
             int remain = amount;
-            double price = 0.0;
 
             Collections.sort(tempBatches, new OrderByLowerPriceFirst());
             Iterator<Batch> batchIterator = tempBatches.iterator();
 
             while (batchIterator.hasNext()) {
                 Batch batch = batchIterator.next();
-                double batchPrice = batch.getUnitPrice();
-                int previousRemain = remain;
                 remain = takeBatchAmount(batch, remain);
-                price += batchPrice * (previousRemain - remain);
                 if (remain == 0) {
                     break;
                 }
             }
 
-            return price;
+            _totalSales += totalPrice;
+            return totalPrice;
 
         } else {
-
             throw new NotEnoughResourcesException(productId, amount, countStock(productId));
         }
     }

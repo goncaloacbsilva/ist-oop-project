@@ -3,7 +3,9 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ggc.app.exception.UnavailableProductException;
@@ -43,7 +45,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         Product product;
 
         if (Form.confirm(Message.requestAddRecipe())) {
-          Set<RecipeComponent> recipe = new HashSet<>();
+          List<RecipeComponent> recipe = new ArrayList<>();
 
           int componentsCount = Form.requestInteger(Message.requestNumberOfComponents());
           double alpha = Form.requestReal(Message.requestAlpha());

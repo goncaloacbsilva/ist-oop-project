@@ -1,7 +1,9 @@
 package ggc.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -94,7 +96,7 @@ public class Parser {
     try {
       _store.getProduct(idProduct);
     } catch (UnknownObjectKeyException ignored) {
-      Set<RecipeComponent> recipe = new HashSet<>();
+      List<RecipeComponent> recipe = new ArrayList<>();
       
       for (String component : components[6].split("#")) {
         String[] recipeComponent = component.split(":");

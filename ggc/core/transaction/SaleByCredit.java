@@ -18,12 +18,35 @@ public class SaleByCredit extends Sale {
         } else {
             _period = 3;
         }
+        partner.increaseSales(getBasePrice());
     }
 
+    @Override
     public double calculatePriceToPay() {
         Rank partnerRank = getPartner().getRank();
-        int interval = _deadline - Date.now().getValue();
+        int interval;
+        if (!isPaid()) {
+            interval = _deadline - Date.now().getValue();
+        } else {
+            interval = _deadline - getPaymentDate();
+        }
         return getBasePrice() * partnerRank.getDiscount(interval, _period) * partnerRank.getPenalty(interval, _period);
+    }
+
+    @Override
+    public void pay() {
+        if (!isPaid()) {
+            Partner partner = getPartner();
+            setPaymentDate(Date.now().getValue());
+            double pricePay = calculatePriceToPay();
+            partner.increasePaidSales(pricePay);
+            if (_deadline - getPaymentDate() >= 0) {
+                partner.addPoints(pricePay);
+            } else {
+                partner.takePoints(_deadline - getPaymentDate());
+            }
+            super.pay();
+        }
     }
 
     @Override

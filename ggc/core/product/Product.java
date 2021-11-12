@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import ggc.core.notifications.Notification;
 import ggc.core.notifications.Subscriber;
@@ -68,6 +70,9 @@ public abstract class Product extends StockEntity implements Comparable<Product>
         return true;
     }
 
+    public List<RecipeComponent> getRecipe() {
+        return new ArrayList<>();
+    }
 
     /**
      * Displays Simple Product Information 
@@ -102,6 +107,12 @@ public abstract class Product extends StockEntity implements Comparable<Product>
         super.addBatch(batch);
     }
 
+
+    public double getLowestPrice() throws IndexOutOfBoundsException {
+        return getBatches(new OrderByLowerPriceFirst()).get(0).getUnitPrice();
+    }
+
+
     /**
      * Sell a specific amount of this product, returns the price
      * @param batch
@@ -129,6 +140,10 @@ public abstract class Product extends StockEntity implements Comparable<Product>
         } else {
             throw new NotEnoughResourcesException(_id, amount, _totalStock);
         }
+    }
+
+    public double getAlpha() {
+        return 0;
     }
     
     /* Override equals in order to compare Products by id */
