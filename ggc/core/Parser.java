@@ -2,24 +2,21 @@ package ggc.core;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.partner.Partner;
-import ggc.core.product.DerivativeProduct;
-import ggc.core.product.RecipeComponent;
-import ggc.core.product.SimpleProduct;
+import ggc.core.DerivativeProduct;
+import ggc.core.RecipeComponent;
+import ggc.core.SimpleProduct;
 
-public class Parser {
+class Parser {
     
   private Warehouse _store;
 
-  public Parser(Warehouse w) {
+  Parser(Warehouse w) {
     _store = w;
   }
 

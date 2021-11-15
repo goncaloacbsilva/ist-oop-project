@@ -2,9 +2,10 @@ package ggc.app.lookups;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
 import ggc.app.exception.UnknownPartnerKeyException;
+
 import ggc.core.WarehouseManager;
-//FIXME import classes
 import ggc.core.exception.UnknownObjectKeyException;
 import ggc.core.exception.UnknownObjectKeyException.ObjectType;
 

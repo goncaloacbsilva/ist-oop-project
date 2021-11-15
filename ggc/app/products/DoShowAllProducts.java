@@ -4,7 +4,6 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
 import ggc.core.WarehouseManager;
-import ggc.core.product.Product;
 
 /**
  * Show all products.
@@ -17,9 +16,7 @@ class DoShowAllProducts extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    for (Product product : _receiver.getProducts()) {
-      _display.addLine(product.toString());
-    }
+    _display.addAll(_receiver.getProducts());
     _display.display();
   }
 

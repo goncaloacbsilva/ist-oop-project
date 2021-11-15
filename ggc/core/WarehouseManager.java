@@ -13,25 +13,18 @@ import java.util.List;
 import ggc.core.Warehouse;
 import ggc.core.Date;
 import ggc.core.Parser;
-import ggc.core.product.Product;
-import ggc.core.transaction.Transaction;
-import ggc.core.transaction.Transaction.TransactionType;
-import ggc.core.product.Batch;
-import ggc.core.partner.Partner;
-
+import ggc.core.Product;
+import ggc.core.Transaction;
+import ggc.core.Transaction.TransactionType;
+import ggc.core.RecipeTextComponent;
+import ggc.core.Batch;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDateValueException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.lookups.BatchesWithPriceLowerThan;
-import ggc.core.lookups.Lookup;
-import ggc.core.lookups.LookupStrategy;
-import ggc.core.lookups.TransactionsPaidByPartner;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.NotEnoughResourcesException;
-import ggc.app.exception.UnknownPartnerKeyException;
-import ggc.app.exception.UnknownProductKeyException;
 
 /** Façade for access. */
 public class WarehouseManager {
@@ -49,7 +42,7 @@ public class WarehouseManager {
     _lookupModule = new Lookup(_warehouse);
   }
 
-  public Collection<Object> lookupOperation(LookupStrategy strategy) throws UnknownObjectKeyException {
+  Collection<Object> lookupOperation(LookupStrategy strategy) throws UnknownObjectKeyException {
     _lookupModule.setStrategy(strategy);
     return _lookupModule.execute();
   }
@@ -72,8 +65,8 @@ public class WarehouseManager {
    * Get the current date object
    * @return Date
    */
-  public Date getDate() {
-    return Date.now();
+  public int getDate() {
+    return Date.now().getValue();
   }
 
   /**
@@ -98,8 +91,8 @@ public class WarehouseManager {
    * @return products list
    * @see Warehouse#getProducts()
    */
-  public List<Product> getProducts() {
-    return _warehouse.getProducts();
+  public Collection<Object> getProducts() {
+    return new ArrayList<>(_warehouse.getProducts());
   }
   
   /**
@@ -107,8 +100,12 @@ public class WarehouseManager {
    * @return partners list
    * @see Warehouse#getPartners()
    */
-  public List<Partner> getPartners() {
-    return _warehouse.getPartners();
+  public Collection<Object> getPartners() {
+    return new ArrayList<>(_warehouse.getPartners());
+  }
+
+  public Collection<Object> getPartnerNotifications(String partnerId) throws UnknownObjectKeyException {
+    return new ArrayList<>(_warehouse.getPartner(partnerId).showNotifications());
   }
 
   /**
@@ -124,6 +121,9 @@ public class WarehouseManager {
     return _warehouse.getBatchesByPartner(partnerId);
   }
 
+  public Collection<Object> getBatchesByProduct(String productId) throws UnknownObjectKeyException {
+    return new ArrayList<>(getProduct(productId).getBatches());
+  }
 
   /**
    * Get a specific partner by its id
@@ -149,11 +149,12 @@ public class WarehouseManager {
 
   /**
    * Register a new Partner on the Warehouse
-   * @param partner Partner object
-   * @return if the operation was successful or not
-   * @see Warehouse#addPartner(Partner partner)
+   * @param Partner id
+   * @param Partner name
+   * @param Partner address
+   * @return
    */
-  public boolean addPartner(String id, String name, String address){
+  public boolean addPartner(String id, String name, String address) {
     return _warehouse.addPartner(new Partner(id, name, address));
   }
 
@@ -163,20 +164,37 @@ public class WarehouseManager {
    * @return if the operation was successful or not
    * @see Warehouse#addProduct(Product product) 
    */
-  public boolean addProduct(Product product) {
-    return _warehouse.addProduct(product);
+  public boolean addSimpleProduct(String id) {
+    return _warehouse.addProduct(new SimpleProduct(id));
   }
-  
+
+  /**
+   * Register a new Product on the Warehouse
+   * @param product Product object
+   * @return if the operation was successful or not
+   * @see Warehouse#addProduct(Product product) 
+   */
+  public boolean addDerivativeProduct(String id, List<RecipeTextComponent> recipe, double alpha) throws UnknownObjectKeyException {
+    List<RecipeComponent> concreteRecipe = new ArrayList<>();
+    for (RecipeTextComponent component : recipe) {
+      concreteRecipe.add(new RecipeComponent(_warehouse.getProduct(component.getId()), component.getAmount()));
+    }
+    return _warehouse.addProduct(new DerivativeProduct(id, concreteRecipe, alpha));
+  }  
+
   public void registerAcquisition(String partnerId, String productId, double price, int amount) throws UnknownObjectKeyException, NotEnoughResourcesException {
-    _warehouse.registerAcquisition(partnerId, productId, price, amount);
+    StockOperation operation = new AcquisitionOperation(_warehouse, price);
+    operation.execute(partnerId, productId, amount);
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int paymentDeadline, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
-    _warehouse.registerSaleByCredit(partnerId, productId, paymentDeadline, amount);
+    StockOperation operation = new SaleOperation(_warehouse, paymentDeadline);
+    operation.execute(partnerId, productId, amount);
   }
 
   public void registerBreakdown(String partnerId, String productId, int amount) throws NotEnoughResourcesException, UnknownObjectKeyException {
-    _warehouse.registerBreakdown(partnerId, productId, amount);
+    StockOperation operation = new BreakdownOperation(_warehouse);
+    operation.execute(partnerId, productId, amount);
   }
 
   public List<Transaction> getTransactionsByPartner(String partnerId, TransactionType type) throws UnknownObjectKeyException {

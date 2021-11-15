@@ -5,8 +5,7 @@ import ggc.core.exception.InvalidDateValueException;
 /**
  * Implements Date object
  */
-public class Date {
-    private static final long serialVersionUID = 202109192006L;
+class Date {
 
     /** Global value shared by all Date instances */
     private static int _globalValue;
@@ -18,7 +17,7 @@ public class Date {
      * Creates a new Date object with the supplied value
      * @param value
      */
-    public Date(int value) {
+    Date(int value) {
         _localValue = value;
     }
 
@@ -54,7 +53,7 @@ public class Date {
      * @return absolute difference between dates 
      */
     
-    public int difference(Date date) {
+    int difference(Date date) {
         return Math.abs(date.getValue() - _localValue);
     }
 
@@ -62,7 +61,7 @@ public class Date {
      * Get Date local value
      * @return local value
      */
-    public int getValue() {
+    int getValue() {
         return _localValue;
     }
 
@@ -70,7 +69,7 @@ public class Date {
      * Get the "Global" Date object
      * @return Date object
      */
-    public static Date now() {
+    static Date now() {
         return new Date(_globalValue);
     }
 }

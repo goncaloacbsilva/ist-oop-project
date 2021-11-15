@@ -21,11 +21,9 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
-    String partnerId = stringField("partnerId");
-    String productId = stringField("productId");
 
     try {
-      _receiver.toggleNotificationStatus(partnerId, productId);
+      _receiver.toggleNotificationStatus(stringField("partnerId"), stringField("productId"));
     } catch (UnknownObjectKeyException exception) {
       switch(exception.getType()) {
         case PARTNER:

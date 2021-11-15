@@ -4,7 +4,6 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.WarehouseManager;
-import ggc.core.product.Batch;
 import ggc.core.exception.UnknownObjectKeyException;
 
 /**
@@ -21,9 +20,7 @@ class DoShowBatchesByProduct extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     String productId = stringField("productId");
     try {
-      for(Batch batch : _receiver.getProduct(productId).getBatches()) {
-        _display.addLine(batch.toString());
-      }
+      _display.addAll(_receiver.getBatchesByProduct(productId));
       _display.display();
     } catch (UnknownObjectKeyException e) {
       throw new UnknownProductKeyException(e.getObjectKey());

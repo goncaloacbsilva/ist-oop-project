@@ -3,7 +3,6 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
-import ggc.core.product.Batch;
 
 /**
  * Show available batches.
@@ -16,9 +15,7 @@ class DoShowAvailableBatches extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    for(Batch batch : _receiver.getAvailableBatches()) {
-      _display.addLine(batch.toString());
-    }
+    _display.addAll(_receiver.getAvailableBatches());
     _display.display();
   }
 
