@@ -1,22 +1,20 @@
-package ggc.core.transaction;
+package ggc.core;
 
 import ggc.core.Date;
-import ggc.core.partner.Partner;
-import ggc.core.partner.rank.Rank;
-import ggc.core.product.Product;
-import ggc.core.transaction.Sale;
+import ggc.core.Product;
+import ggc.core.Sale;
 
-public class BreakdownSale extends Sale {
+class BreakdownSale extends Sale {
 
     private String _componentsString;
 
-    public BreakdownSale(int currentId, Product product, int quantity, Partner partner, double basePrice, String componentsString) {
+    BreakdownSale(int currentId, Product product, int quantity, Partner partner, double basePrice, String componentsString) {
         super(currentId, product, quantity, partner, basePrice, 0);
         _componentsString = componentsString;
     }
 
     @Override
-    public double calculatePriceToPay() {
+    double calculatePriceToPay() {
         double basePrice = getBasePrice();
         if (basePrice < 0) {
             return 0.0;
@@ -26,13 +24,14 @@ public class BreakdownSale extends Sale {
     }
 
     @Override
-    public void pay() {
+    double pay() {
         if (!isPaid()) {
             Partner partner = getPartner();
             setPaymentDate(Date.now().getValue());
             partner.addPoints(calculatePriceToPay());
             super.pay();
         }
+        return 0.0;
     }
 
     @Override

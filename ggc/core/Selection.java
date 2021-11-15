@@ -1,9 +1,8 @@
-package ggc.core.partner.rank;
+package ggc.core;
 import java.io.Serializable;
-import ggc.core.partner.Partner;
 
 /** Implements Selection class */
-public class Selection implements Rank, Serializable {
+class Selection implements Rank, Serializable {
     
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
@@ -39,7 +38,7 @@ public class Selection implements Rank, Serializable {
 
     public double getPenalty(int period, int N) {
 
-        if (period>=N){
+        if (period>=N) {
             return 1.00;
         }
 
@@ -67,12 +66,12 @@ public class Selection implements Rank, Serializable {
         }
     }
 
-    public String getRankName(){
+    public String getRankName() {
         return "SELECTION";
     }
 
     
-    public double getPointsPenalty(int period){
+    public double getPointsPenalty(int period) {
         if(period < -2) {
             return 0.10;
         } else {

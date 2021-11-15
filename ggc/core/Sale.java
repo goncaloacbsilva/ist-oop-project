@@ -1,20 +1,18 @@
-package ggc.core.transaction;
+package ggc.core;
 
-import ggc.core.Date;
-import ggc.core.partner.Partner;
-import ggc.core.product.Product;
+import ggc.core.Product;
 
-public abstract class Sale extends Transaction {
+abstract class Sale extends Transaction {
 
     private double _basePrice;
 
-    public Sale(int currentId, Product product, int quantity, Partner partner, double basePrice, int date) {
+    Sale(int currentId, Product product, int quantity, Partner partner, double basePrice, int date) {
         super(currentId, product, quantity, partner, date, TransactionType.SALE);
         _basePrice = basePrice;
     }
 
     @Override
-    public double getBasePrice() {
+    double getBasePrice() {
         return _basePrice;
     } 
 

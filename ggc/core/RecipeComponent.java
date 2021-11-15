@@ -1,9 +1,9 @@
-package ggc.core.product;
+package ggc.core;
 
-import ggc.core.product.Product;
+import ggc.core.Product;
 
 /** Implements Recipe Component class */
-public class RecipeComponent implements Comparable<RecipeComponent> {
+class RecipeComponent implements Comparable<RecipeComponent> {
 
     /** Product associated to the recipe component */
     private Product _product;
@@ -16,7 +16,7 @@ public class RecipeComponent implements Comparable<RecipeComponent> {
      * @param product product associated
      * @param amount product amount for the recipe
      */
-    public RecipeComponent(Product product, int amount) {
+    RecipeComponent(Product product, int amount) {
         _product = product;
         _amount = amount;
     }
@@ -25,7 +25,7 @@ public class RecipeComponent implements Comparable<RecipeComponent> {
      * Get associated product
      * @return Product
      */
-    public Product getProduct() {
+    Product getProduct() {
         return _product;
     }
 
@@ -33,7 +33,7 @@ public class RecipeComponent implements Comparable<RecipeComponent> {
      * Get product amount for the recipe
      * @return int amount
      */
-    public int getAmount() {
+    int getAmount() {
         return _amount;
     }
 

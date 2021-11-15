@@ -1,20 +1,15 @@
-package ggc.core.lookups;
+package ggc.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import ggc.core.Warehouse;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.product.Batch;
-import ggc.core.product.Product;
-import ggc.core.transaction.Transaction;
-import ggc.core.transaction.Transaction.TransactionType;
+import ggc.core.Transaction.TransactionType;
 
-public class TransactionsPaidByPartner implements LookupStrategy {
+class TransactionsPaidByPartner implements LookupStrategy {
     private String _partnerId;
 
-    public TransactionsPaidByPartner(String partnerId) {
+    TransactionsPaidByPartner(String partnerId) {
         _partnerId = partnerId;
     }
 

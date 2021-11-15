@@ -1,11 +1,11 @@
-package ggc.core.product;
+package ggc.core;
 
 import java.io.Serializable;
-import ggc.core.partner.Partner;
-import ggc.core.product.Product;
+
+import ggc.core.Product;
 
 /** Implements Batch class */
-public class Batch implements Serializable, Comparable<Batch> {
+class Batch implements Serializable, Comparable<Batch> {
 
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
@@ -29,14 +29,14 @@ public class Batch implements Serializable, Comparable<Batch> {
      * @param amount amount of product units
      * @param unitPrice Price per unit
      */
-    public Batch(Partner supplier, Product product, int amount, double unitPrice) {
+    Batch(Partner supplier, Product product, int amount, double unitPrice) {
         _supplier = supplier;
         _product = product;
         _amount = amount;
         _unitPrice = unitPrice;
     }
 
-    public Batch makeCopy() {
+    Batch makeCopy() {
         return new Batch(_supplier, _product, _amount, _unitPrice);
     }
 
@@ -44,15 +44,15 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get amount of product units
      * @return amount
      */
-    public int getAmount() {
+    int getAmount() {
         return _amount;
     }
 
-    public void addAmount(int amount) {
+    void addAmount(int amount) {
         _amount += amount;
     }
 
-    public void takeAmount(int amount) {
+    void takeAmount(int amount) {
         _amount -= amount;
     }
 
@@ -60,7 +60,7 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get price per unit
      * @return price
      */
-    public double getUnitPrice() {
+    double getUnitPrice() {
         return _unitPrice;
     }
 
@@ -68,7 +68,7 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get batch associated Product id
      * @return product id
      */
-    public String getProductId() {
+    String getProductId() {
         return _product.getId();
     }
 
@@ -76,7 +76,7 @@ public class Batch implements Serializable, Comparable<Batch> {
      * Get batch associated Partner (supplier) id 
      * @return supplier id
      */
-    public String getSupplierId() {
+    String getSupplierId() {
         return _supplier.getId();
     }
 

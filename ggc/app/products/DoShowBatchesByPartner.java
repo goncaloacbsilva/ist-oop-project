@@ -4,7 +4,6 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
-import ggc.core.product.Batch;
 import ggc.core.exception.UnknownObjectKeyException;
 
 /**
@@ -21,9 +20,7 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     String partnerId = stringField("partnerId");
     try {
-      for(Batch batch : _receiver.getBatchesByPartner(partnerId)) {
-        _display.addLine(batch.toString());
-      }
+      _display.addAll(_receiver.getBatchesByPartner(partnerId));
       _display.display();
     } catch (UnknownObjectKeyException e) {
       throw new UnknownPartnerKeyException(e.getObjectKey());

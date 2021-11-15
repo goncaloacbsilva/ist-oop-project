@@ -1,5 +1,4 @@
-package ggc.core.partner.rank;
-import ggc.core.partner.Partner;
+package ggc.core;
 
 /** Rank interface */
 public interface Rank {

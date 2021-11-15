@@ -1,15 +1,12 @@
-package ggc.core.lookups;
+package ggc.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ggc.core.Warehouse;
-import ggc.core.product.Batch;
-
-public class BatchesWithPriceLowerThan implements LookupStrategy {
+class BatchesWithPriceLowerThan implements LookupStrategy {
     private double _price;
 
-    public BatchesWithPriceLowerThan(double price) {
+    BatchesWithPriceLowerThan(double price) {
         _price = price;
     }
 

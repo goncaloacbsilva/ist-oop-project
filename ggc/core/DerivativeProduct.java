@@ -1,13 +1,13 @@
-package ggc.core.product;
+package ggc.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ggc.core.product.Product;
-import ggc.core.product.RecipeComponent;
+import ggc.core.Product;
+import ggc.core.RecipeComponent;
 
 /** Implements Derivative Product class */
-public class DerivativeProduct extends Product {
+class DerivativeProduct extends Product {
 
     /** Derivative Product Recipe */
     private List<RecipeComponent> _recipe;
@@ -21,27 +21,27 @@ public class DerivativeProduct extends Product {
      * @param recipe recipe
      * @param alpha Alpha factor
      */
-    public DerivativeProduct(String id, List<RecipeComponent> recipe, double alpha) {
+    DerivativeProduct(String id, List<RecipeComponent> recipe, double alpha) {
         super(id);
         _recipe = new ArrayList<>(recipe);
         _alpha = alpha;
     }
-
+    
     /**
      * Get Product recipe
      * @return RecipeComponent set
      */
-    public List<RecipeComponent> getRecipe() {
+    List<RecipeComponent> getRecipe() {
         return _recipe;
     }
 
     @Override
-    public double getAlpha() {
+    double getAlpha() {
         return _alpha;
     }
 
     @Override
-    public boolean isSimple() {
+    boolean isSimple() {
         return false;
     }
 

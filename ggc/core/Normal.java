@@ -1,9 +1,8 @@
-package ggc.core.partner.rank;
+package ggc.core;
 import java.io.Serializable;
-import ggc.core.partner.Partner;
 
 /** Implements Normal class */
-public class Normal implements Rank, Serializable {
+class Normal implements Rank, Serializable {
     
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
@@ -18,8 +17,8 @@ public class Normal implements Rank, Serializable {
         
     }
     
-    public double getPenalty(int period, int N){
-        if (period >= N){
+    public double getPenalty(int period, int N) {
+        if (period >= N) {
             return 1.00;
         }
 
@@ -49,7 +48,7 @@ public class Normal implements Rank, Serializable {
     }
 
 
-    public double getPointsPenalty(int period){
+    public double getPointsPenalty(int period) {
         return 0*period;
     }
 

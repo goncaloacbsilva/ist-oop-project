@@ -4,9 +4,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ggc.app.exception.UnavailableProductException;
 import ggc.app.exception.UnknownPartnerKeyException;
@@ -14,11 +12,9 @@ import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.NotEnoughResourcesException;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.core.product.DerivativeProduct;
-import ggc.core.product.Product;
-import ggc.core.product.RecipeComponent;
-import ggc.core.product.SimpleProduct;
+import ggc.core.RecipeTextComponent;
 import pt.tecnico.uilib.forms.Form;
+
 
 /**
  * Register order.
@@ -42,10 +38,10 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         _receiver.getProduct(stringField("productId"));
       } catch (UnknownObjectKeyException ignored) {
         
-        Product product;
+
 
         if (Form.confirm(Message.requestAddRecipe())) {
-          List<RecipeComponent> recipe = new ArrayList<>();
+          List<RecipeTextComponent> recipe = new ArrayList<>();
 
           int componentsCount = Form.requestInteger(Message.requestNumberOfComponents());
           double alpha = Form.requestReal(Message.requestAlpha());
@@ -53,16 +49,14 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
           for(int i = 0; i < componentsCount; i++) {
             String productId = Form.requestString(Message.requestProductKey());
             int amount = Form.requestInteger(Message.requestAmount());
-            recipe.add(new RecipeComponent(_receiver.getProduct(productId), amount));
+            recipe.add(new RecipeTextComponent(productId, amount));
           }
 
-          product = new DerivativeProduct(stringField("productId"), recipe, alpha);
+          _receiver.addDerivativeProduct(stringField("productId"), recipe, alpha);
 
         } else {
-          product = new SimpleProduct(stringField("productId"));
+          _receiver.addSimpleProduct(stringField("productId"));
         }
-
-        _receiver.addProduct(product);
 
       }
 

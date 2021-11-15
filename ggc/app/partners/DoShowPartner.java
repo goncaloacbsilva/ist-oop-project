@@ -2,11 +2,11 @@ package ggc.app.partners;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
 import ggc.core.WarehouseManager;
 import ggc.core.exception.UnknownObjectKeyException;
-import ggc.app.exception.UnknownPartnerKeyException;
 
-//FIXME import classes
+import ggc.app.exception.UnknownPartnerKeyException;
 
 /**
  * Show partner.
@@ -23,7 +23,7 @@ class DoShowPartner extends Command<WarehouseManager> {
     String partnerId = stringField("partnerId");
     try {
       _display.addLine(_receiver.getPartner(partnerId));
-      _display.addAll(_receiver.getPartner(partnerId).showNotifications());
+      _display.addAll(_receiver.getPartnerNotifications(partnerId));
       _display.display();
     } catch (UnknownObjectKeyException e) {
       throw new UnknownPartnerKeyException(e.getObjectKey());

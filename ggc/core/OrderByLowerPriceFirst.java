@@ -1,10 +1,8 @@
-package ggc.core.product.comparators;
+package ggc.core;
 
 import java.util.Comparator;
 
-import ggc.core.product.Batch;
-
-public class OrderByLowerPriceFirst implements Comparator<Batch> {
+class OrderByLowerPriceFirst implements Comparator<Batch> {
     
     @Override
     public int compare(Batch o1, Batch o2) {
