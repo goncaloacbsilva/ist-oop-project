@@ -1,10 +1,6 @@
-[![ForTheBadge built-with-swag](http://ForTheBadge.com/images/badges/built-with-swag.svg)](https://GitHub.com/Naereen/)
+# Object-oriented programming - Warehouse Manager Project
 
-# PO - Warehouse Manager Project
-
-## Created with 🍺🍺 and some ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
-
-## `1441 lines of code in 4 days ✅`
+## Created with ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 
 ## Branches
 - [1st Submited Version (feat/CORE/Version1)](https://gitlab.com/goncaloasilva/po-project/-/tree/feat/CORE/Version1)
